@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="favicon.ico" rel="shortcut icon">
+  <link rel="stylesheet" href="/static/style.css">
+  <title>What's for Dinner</title>
+  <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+
+<body>
+  <div class="container">
+
+    <header class="header clearfix">
+      <div class="logo">What&rsquo;s for Dinner?</div>
+
+      <nav class="menu_main">
+        <ul>
+          <li class="active"><a href="#" onclick="javascript:document.getElementById('about').style.display = 'block'">About</a></li>
+          <li><a href="/admin/dinner/">Admin</a></li>
+        </ul>
+      </nav>
+    </header>
+
+
+    <div class="info">
+      <article class="hero clearfix">
+        <div class="col_100">
+          <h1>Some random suggestions:</h1>
+
+            <table style="margin-left: 5em; margin-bottom: 2em">
+            {% for meal in random %}
+            <tr>
+            <td>{{ meal.name|capfirst }}{% if meal.common %}*{% endif %}</td>
+            </tr>
+            {% endfor %}
+            </table>
+
+        </div>
+      </article>
+
+
+      <article class="article clearfix">
+        <div class="col_33">
+          <h2>Latest Dinners</h2>
+          <table class="table">
+          <tbody>
+          {% for meal in latest %}
+          <tr>
+            <td style="width:1%; white-space: nowrap">{{ meal.date }}</td>
+            <td>{{ meal.meal|capfirst }}{% if meal.common %}*{% endif %}</td>
+          </tr>
+          {% endfor %}
+
+          </tbody>
+          </table>
+        </div>
+
+        <div class="col_33">
+          <h2>Most Popular Dinners <span style="font-size: 60%">[1 year]</span></h2>
+          <table class="table">
+          <tbody>
+          {% for meal in popular %}
+          <tr>
+            <td style="width:1%; white-space: nowrap; text-align: right">{{ meal.meal__count }}</td>
+            <td>{{ meal.meal__name|capfirst }}</td>
+          </tr>
+          {% endfor %}
+
+          </tbody>
+          </table>
+        </div>
+
+        <div class="col_33">
+          <h2>It's been a while <span style="font-size: 60%">[common]</span></h2>
+          <table class="table">
+          <tbody>
+          {% for meal in aging %}
+          <tr>
+            <td style="width:1%; white-space: nowrap">{{ meal.last_eaten|default_if_none:"Never" }}</td>
+            <td>{{ meal.name|capfirst }}</td>
+          </tr>
+          {% endfor %}
+
+          </tbody>
+          </table>
+        </div>
+
+        <div class="clearfix"></div>
+
+    </div>
+
+    <footer class="footer clearfix">
+    &nbsp;
+    </footer>
+
+  </div>
+
+<div id="about" style="display: none; position: absolute; border: 3px solid green; background:white; padding: 1em; top: 5em; bottom: 12em; right: 12em; left: 12em">
+<div style="float: right"><a href="#" onclick="javascript:document.getElementById('about').style.display = 'none'">Close Window</a></div>
+<h1>This will explain everything.</h1>
+
+But, why can't software predict what groceries I'm likely to want at any given time, based on analysis of old shopping receipts? Since we often by similar quantities of similiar products at relatively regular intervals...
+
+</div>
+
+</body>
+</html>
+
