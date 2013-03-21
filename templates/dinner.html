@@ -5,14 +5,23 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link href="favicon.ico" rel="shortcut icon">
   <link rel="stylesheet" href="/static/style.css">
+  <script src="https://www.google.com/jsapi"></script>
+  <script>var image_search_terms="{% for w in random_names %}{{w}} {% endfor %}";</script>
+  <script src="/static/googleimages.js"></script>
   <title>What's for Dinner</title>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <style>
+    h1 { margin-top: 0.5em }
+    h2 { margin-top: 0.5em }
+    .hero { margin-bottom: 1em }
+
+  </style>
 </head>
 
 <body>
   <div class="container">
 
-    <header class="header clearfix">
+    <header class="header clearfix" style="padding-top: 1em; padding-bottom: 1em" >
       <div class="logo">What&rsquo;s for Dinner?</div>
 
       <nav class="menu_main">
@@ -27,9 +36,12 @@
     <div class="info">
       <article class="hero clearfix">
         <div class="col_100">
+
+          <div style="float: right; padding-right: 50px" id="image-container"><div id="google-images"></div></div>
+
           <h1>Some random suggestions:</h1>
 
-            <table style="margin-left: 5em; margin-bottom: 2em">
+            <table id="random-suggestions" style="margin-left: 5em; margin-bottom: 2em">
             {% for meal in random %}
             <tr>
             <td>{{ meal.name|capfirst }}{% if meal.common %}*{% endif %}</td>

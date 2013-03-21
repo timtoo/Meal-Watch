@@ -17,6 +17,8 @@ def index(request):
     popular_days = 365
     context = {}
     context['random'] = models.Meal.objects.select_related().order_by('?')[:3]
+    context['random_names'] = [ x.name for x in context['random'] ]
+    print context['random_names']
     context['latest'] = models.Eaten.objects.select_related().order_by('-date')[:max_rows]
     context['popular'] = models.Eaten.objects.filter(
             date__gte=date_delta(-popular_days)).values(
