@@ -1,10 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 RATING_RANGE = zip(range(1,11), range(1,11))
 
 class MealType(models.Model):
     name = models.CharField(max_length=32, unique=True)
     created = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(User)
 
     class Meta:
         ordering = ['name']
@@ -15,6 +17,7 @@ class MealType(models.Model):
 class FoodType(models.Model):
     name = models.CharField(max_length=32, unique=True)
     created = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(User)
 
     class Meta:
         ordering = ['name']
@@ -33,6 +36,7 @@ class Meal(models.Model):
     common = models.BooleanField(default=False)
     notes = models.TextField(blank=True)
     last_eaten = models.DateField(null=True, editable=False, db_index=True)
+    owner = models.ForeignKey(User)
 
     class Meta:
         ordering = ['name']
@@ -43,6 +47,7 @@ class Meal(models.Model):
 class People(models.Model):
     name = models.CharField(max_length=48, unique=True)
     created = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(User)
 
     class Meta:
         ordering = ['name']

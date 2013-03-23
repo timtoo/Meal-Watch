@@ -11,14 +11,16 @@ def date_delta(days):
     """Return timedate object the number of days from/to current"""
     return timezone.now().date() + timedelta(days=days)
 
-
 def index(request):
+    context = {}
+    return render(request, 'base.html', context)
+
+def overview(request, userid):
     max_rows = 10
     popular_days = 365
     context = {}
     context['random'] = models.Meal.objects.select_related().order_by('?')[:3]
     context['random_names'] = [ x.name for x in context['random'] ]
-    print context['random_names']
     context['latest'] = models.Eaten.objects.select_related().order_by('-date')[:max_rows]
     context['popular'] = models.Eaten.objects.filter(
             date__gte=date_delta(-popular_days)).values(

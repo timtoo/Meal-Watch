@@ -22,6 +22,7 @@ function searchComplete() {
 
       aContainer.title = result.titleNoFormatting;
       aContainer.href = result.originalContextUrl;
+      aContainer.target = '_blank';
       newImg.src=result.tbUrl;
       newImg.height='100';
 
