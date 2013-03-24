@@ -2,13 +2,13 @@
 {% block content %}
 
         <div class="col_33">
-          <h2>Latest Dinners</h2>
+          <h2>Latest Meals</h2>
           <table class="table">
           <tbody>
           {% for meal in latest %}
           <tr>
-            <td style="width:1%; white-space: nowrap">{{ meal.date }}</td>
-            <td>{{ meal.meal|capfirst }}{% if meal.common %}*{% endif %}</td>
+            <td style="width:1%; white-space: nowrap">{{ meal.date }}</span></td>
+            <td id="lm-{{meal.id}}-{{meal.meal_id}}" class="atip">{{ meal.meal|capfirst }}{% if meal.common %}*{% endif %}</td>
           </tr>
           {% endfor %}
 
@@ -17,13 +17,13 @@
         </div>
 
         <div class="col_33">
-          <h2>Most Popular Dinners <span style="font-size: 60%">[1 year]</span></h2>
+          <h2>Most Popular Meals <span style="font-size: 60%">[1 year]</span></h2>
           <table class="table">
           <tbody>
           {% for meal in popular %}
           <tr>
             <td style="width:1%; white-space: nowrap; text-align: right">{{ meal.eaten__count }}</td>
-            <td>{{ meal.name|capfirst }}</td>
+            <td id="pm-0-{{meal.id}}" class="atip">{{ meal.name|capfirst }}</td>
           </tr>
           {% endfor %}
 
@@ -38,7 +38,7 @@
           {% for meal in aging %}
           <tr>
             <td style="width:1%; white-space: nowrap">{{ meal.last_eaten|default_if_none:"Never" }}</td>
-            <td>{{ meal.name|capfirst }}</td>
+            <td id="am-0-{{meal.id}}" class="atip">{{ meal.name|capfirst }}</td>
           </tr>
           {% endfor %}
 
@@ -46,5 +46,30 @@
           </table>
         </div>
 
+{% endblock %}
+
+{% block bottom %}
+<script>
+$(document).ready(
+    function() {
+
+$(document).tooltip({
+    items:'.atip',
+    tooltipClass:'preview-tip',
+//    position: { my: "top left", at: "bottom left", offset: "15 0" },
+    content:function(callback) {
+        $.get('../mealtip', {
+            id:this.id
+        }, function(data) {
+            callback(data);
+        });
+    },
+});
+
+
+});
+
+
+</script>
 {% endblock %}
 

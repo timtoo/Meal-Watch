@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.utils import timezone
 from django.db.models import Count
+from django.http import HttpResponse
 
 from datetime import timedelta
 
@@ -35,4 +36,19 @@ def overview(request, userid):
             ).order_by('last_eaten', '-rating', 'name')[:max_rows]
     return render(request, 'dinner.html', context)
 
+def meal_tip(request):
+    mealid = request.GET.get('id', '').rsplit('-',1)[-1]
+    meal = models.Meal.objects.get(id=mealid)
+
+    notes = []
+    for e in models.Eaten.objects.filter(meal=mealid).order_by('-date', '-id')[:5]:
+        if e.notes:
+            notes.append("<b>[%s]</b> %s\n" % (e.date, e.notes))
+
+    html = ''.join(notes).replace('\n', '<br>')
+
+    if meal.notes:
+        html += '<hr>' + meal.notes
+
+    return HttpResponse(html)
 
