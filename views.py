@@ -13,6 +13,10 @@ def date_delta(days):
 
 def index(request):
     context = {}
+    context['random'] = models.Meal.objects.filter(
+            created__gte = date_delta(-90)).select_related(
+            ).order_by('?')[:3]
+    context['random_names'] = [ x.name for x in context['random'] ]
     return render(request, 'base.html', context)
 
 def overview(request, userid):

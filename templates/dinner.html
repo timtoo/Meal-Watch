@@ -1,59 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link href="favicon.ico" rel="shortcut icon">
-  <link rel="stylesheet" href="/static/dinner/style.css">
-  <script src="https://www.google.com/jsapi"></script>
-  <script>var image_search_terms="{% for w in random_names %}{{w}} {% endfor %}";</script>
-  <script src="/static/dinner/googleimages.js"></script>
-  <title>What's for Dinner</title>
-  <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-  <style>
-    h1 { margin-top: 0.5em }
-    h2 { margin-top: 0.5em }
-    .hero { margin-bottom: 1em }
+{% extends "base.html" %}
+{% block content %}
 
-  </style>
-</head>
-
-<body>
-  <div class="container">
-
-    <header class="header clearfix" style="padding-top: 1em; padding-bottom: 1em" >
-      <div class="logo">What&rsquo;s for Dinner?</div>
-
-      <nav class="menu_main">
-        <ul>
-          <li class="active"><a href="#" onclick="javascript:document.getElementById('about').style.display = 'block'">About</a></li>
-          <li><a href="/admin/dinner/">Admin</a></li>
-        </ul>
-      </nav>
-    </header>
-
-
-    <div class="info">
-      <article class="hero clearfix">
-        <div class="col_100">
-
-          <div style="float: right; padding-right: 50px; white-space: nowrap" id="image-container"><div id="google-images"></div></div>
-
-          <h1>Some random suggestions:</h1>
-
-            <table id="random-suggestions" style="margin-left: 5em; margin-bottom: 2em">
-            {% for meal in random %}
-            <tr>
-            <td>{{ meal.name|capfirst }}{% if meal.common %}*{% endif %}</td>
-            </tr>
-            {% endfor %}
-            </table>
-
-        </div>
-      </article>
-
-
-      <article class="article clearfix">
         <div class="col_33">
           <h2>Latest Dinners</h2>
           <table class="table">
@@ -99,24 +46,5 @@
           </table>
         </div>
 
-        <div class="clearfix"></div>
-
-    </div>
-
-    <footer class="footer clearfix">
-    &nbsp;
-    </footer>
-
-  </div>
-
-<div id="about" style="display: none; position: absolute; border: 3px solid green; background:white; padding: 1em; top: 5em; bottom: 12em; right: 12em; left: 12em">
-<div style="float: right"><a href="#" onclick="javascript:document.getElementById('about').style.display = 'none'">Close Window</a></div>
-<h1>This will explain everything.</h1>
-
-But, why can't software predict what groceries I'm likely to want at any given time, based on analysis of old shopping receipts? Since we often by similar quantities of similiar products at relatively regular intervals...
-
-</div>
-
-</body>
-</html>
+{% endblock %}
 

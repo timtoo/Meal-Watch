@@ -3,19 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link href="favicon.ico" rel="shortcut icon">
+  <link href="/static/dinner/favicon.ico" rel="shortcut icon">
   <link rel="stylesheet" href="/static/dinner/style.css">
   <script src="https://www.google.com/jsapi"></script>
   <script>var image_search_terms="{% for w in random_names %}{{w}} {% endfor %}";</script>
   <script src="/static/dinner/googleimages.js"></script>
   <title>What's for Dinner</title>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
   <style>
     h1 { margin-top: 0.5em }
     h2 { margin-top: 0.5em }
     .hero { margin-bottom: 1em }
-
   </style>
+
 </head>
 
 <body>
@@ -34,11 +35,12 @@
 
 
     <div class="info">
-      <article class="hero clearfix">
+
+    <article class="hero clearfix">
         <div class="col_100">
 
           <div style="float: right; padding-right: 50px" id="image-container"><div id="google-images"></div></div>
-
+{% block bluebar %}
           <h1>Some random suggestions:</h1>
 
             <table id="random-suggestions" style="margin-left: 5em; margin-bottom: 2em">
@@ -48,56 +50,37 @@
             </tr>
             {% endfor %}
             </table>
-
+{% endblock %}
         </div>
       </article>
 
-
       <article class="article clearfix">
+{% block content %}
         <div class="col_33">
-          <h2>Latest Dinners</h2>
-          <table class="table">
-          <tbody>
-          {% for meal in latest %}
-          <tr>
-            <td style="width:1%; white-space: nowrap">{{ meal.date }}</td>
-            <td>{{ meal.meal|capfirst }}{% if meal.common %}*{% endif %}</td>
-          </tr>
-          {% endfor %}
-
-          </tbody>
-          </table>
+          <h2>We're here to help with...</h2>
+          <ul>
+            <li>Random suggestions
+            <li>A list of what you've had lately
+            <li>What's most popular with you
+            <li>Common meals you haven't had in a while
+          </ul>
         </div>
 
         <div class="col_33">
-          <h2>Most Popular Dinners <span style="font-size: 60%">[1 year]</span></h2>
-          <table class="table">
-          <tbody>
-          {% for meal in popular %}
-          <tr>
-            <td style="width:1%; white-space: nowrap; text-align: right">{{ meal.meal__count }}</td>
-            <td>{{ meal.meal__name|capfirst }}</td>
-          </tr>
-          {% endfor %}
-
-          </tbody>
-          </table>
+          <h2>All you have to do...</span></h2>
+          <ul>
+            <li>Sign up for an account
+            <li>Simply add your meals each day
+          <ul>
         </div>
 
         <div class="col_33">
-          <h2>It's been a while <span style="font-size: 60%">[common]</span></h2>
-          <table class="table">
-          <tbody>
-          {% for meal in aging %}
-          <tr>
-            <td style="width:1%; white-space: nowrap">{{ meal.last_eaten|default_if_none:"Never" }}</td>
-            <td>{{ meal.name|capfirst }}</td>
-          </tr>
-          {% endfor %}
-
-          </tbody>
-          </table>
+          <h2>Why?</h2>
+          <p>Every day as dinner time approaches the eternal question looms: what's for dinner?
+          <p>Some days you just want a little help not to have to think about it.
         </div>
+
+{% endblock %}
 
         <div class="clearfix"></div>
 
