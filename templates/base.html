@@ -45,6 +45,7 @@
 
           <div style="float: right; padding-right: 50px" id="image-container"><div id="google-images"></div><div style="text-align: right; font-size: 7pt; color: #ccc;">Random images via <a style="color: inherit" href="http://images.google.com" target="_blank">Google</a></div></div>
 {% block bluebar %}
+        <div style="float:left">
           <h1>Some random suggestions:</h1>
 
             <table id="random-suggestions" style="margin-left: 5em; margin-bottom: 2em">
@@ -54,6 +55,7 @@
             </tr>
             {% endfor %}
             </table>
+            </div>
 {% endblock %}
         </div>
       </article>

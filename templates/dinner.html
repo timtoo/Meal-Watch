@@ -6,9 +6,9 @@
           <table class="table">
           <tbody>
           {% for meal in latest %}
-          <tr>
+          <tr id="lm-{{meal.id}}-{{meal.meal_id}}" class="atip">
             <td style="width:1%; white-space: nowrap">{{ meal.date }}</span></td>
-            <td id="lm-{{meal.id}}-{{meal.meal_id}}" class="atip">{{ meal.meal|capfirst }}{% if meal.common %}*{% endif %}</td>
+            <td>{{ meal.meal|capfirst }}{% if meal.common %}*{% endif %}</td>
           </tr>
           {% endfor %}
 
@@ -21,9 +21,9 @@
           <table class="table">
           <tbody>
           {% for meal in popular %}
-          <tr>
+          <tr id="pm-0-{{meal.id}}" class="atip">
             <td style="width:1%; white-space: nowrap; text-align: right">{{ meal.eaten__count }}</td>
-            <td id="pm-0-{{meal.id}}" class="atip">{{ meal.name|capfirst }}</td>
+            <td>{{ meal.name|capfirst }}</td>
           </tr>
           {% endfor %}
 
@@ -36,9 +36,9 @@
           <table class="table">
           <tbody>
           {% for meal in aging %}
-          <tr>
+          <tr id="am-0-{{meal.id}}" class="atip">
             <td style="width:1%; white-space: nowrap">{{ meal.last_eaten|default_if_none:"Never" }}</td>
-            <td id="am-0-{{meal.id}}" class="atip">{{ meal.name|capfirst }}</td>
+            <td>{{ meal.name|capfirst }}</td>
           </tr>
           {% endfor %}
 

@@ -13,7 +13,7 @@ function searchComplete() {
 
     // Loop through our results, printing them to the page.
     var results = imageSearch.results;
-    for (var i = 0; i < Math.min(4, results.length); i++) {
+    for (var i = 0; i < Math.min(5, results.length); i++) {
 
       var result = results[i];
       var imgContainer = document.createElement('div');
