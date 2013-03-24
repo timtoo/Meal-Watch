@@ -23,15 +23,15 @@ def overview(request, userid):
     max_rows = 10
     popular_days = 365
     context = {}
-    context['random'] = models.Meal.objects.select_related().order_by('?')[:3]
+    context['random'] = models.Meal.objects.filter(owner=userid).select_related().order_by('?')[:3]
     context['random_names'] = [ x.name for x in context['random'] ]
-    context['latest'] = models.Eaten.objects.select_related().order_by('-date')[:max_rows]
-    context['popular'] = models.Meal.objects.filter(
+    context['latest'] = models.Eaten.objects.filter(meal__owner=userid).select_related().order_by('-date')[:max_rows]
+    context['popular'] = models.Meal.objects.filter(owner=userid,
             eaten__date__gte=date_delta(-popular_days)).values(
             'id','name', 'common', 'last_eaten').annotate(
             Count('eaten')).order_by(
             '-eaten__count','-last_eaten', 'name')[:max_rows]
-    context['aging'] = models.Meal.objects.filter(common=True).select_related(
+    context['aging'] = models.Meal.objects.filter(common=True, owner=userid).select_related(
             ).order_by('last_eaten', '-rating', 'name')[:max_rows]
     return render(request, 'dinner.html', context)
 
