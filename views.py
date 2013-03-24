@@ -22,11 +22,11 @@ def overview(request, userid):
     context['random'] = models.Meal.objects.select_related().order_by('?')[:3]
     context['random_names'] = [ x.name for x in context['random'] ]
     context['latest'] = models.Eaten.objects.select_related().order_by('-date')[:max_rows]
-    context['popular'] = models.Eaten.objects.filter(
-            date__gte=date_delta(-popular_days)).values(
-            'meal_id','meal__name', 'meal__common').annotate(
-            Count('meal')).order_by(
-            '-meal__count','-date', 'meal__name')[:max_rows]
+    context['popular'] = models.Meal.objects.filter(
+            eaten__date__gte=date_delta(-popular_days)).values(
+            'id','name', 'common', 'last_eaten').annotate(
+            Count('eaten')).order_by(
+            '-eaten__count','-last_eaten', 'name')[:max_rows]
     context['aging'] = models.Meal.objects.filter(common=True).select_related(
             ).order_by('last_eaten', '-rating', 'name')[:max_rows]
     return render(request, 'dinner.html', context)
