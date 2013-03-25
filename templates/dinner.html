@@ -7,7 +7,7 @@
           <tbody>
           {% for meal in latest %}
           <tr id="lm-{{meal.id}}-{{meal.meal_id}}" class="atip">
-            <td style="width:1%; white-space: nowrap">{{ meal.date }}</span></td>
+            <td style="width:1%; white-space: nowrap">{{ meal.date|date:"M j (D.)" }}</span></td>
             <td>{{ meal.meal|capfirst }}{% if meal.common %}*{% endif %}</td>
           </tr>
           {% endfor %}
@@ -55,8 +55,8 @@ $(document).ready(
 
 $(document).tooltip({
     items:'.atip',
-    tooltipClass:'preview-tip',
-//    position: { my: "top left", at: "bottom left", offset: "15 0" },
+    tooltipClass:'ttclass',
+    track: true,
     content:function(callback) {
         $.get('../mealtip', {
             id:this.id
