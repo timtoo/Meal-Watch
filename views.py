@@ -26,7 +26,7 @@ def overview(request, userid):
     context = {}
     context['random'] = models.Meal.objects.filter(owner=userid).select_related().order_by('?')[:3]
     context['random_names'] = [ x.name for x in context['random'] ]
-    context['latest'] = models.Eaten.objects.filter(meal__owner=userid).select_related().order_by('-date')[:max_rows]
+    context['latest'] = models.Eaten.objects.filter(meal__owner=userid).select_related().values('date', 'meal__name', 'meal__id', 'id', 'meal__common', 'meal__foodtype__color').order_by('-date')[:max_rows]
     context['popular'] = models.Meal.objects.filter(owner=userid,
             eaten__date__gte=date_delta(-popular_days)).values(
             'id','name', 'common', 'last_eaten').annotate(
@@ -34,6 +34,7 @@ def overview(request, userid):
             '-eaten__count','-last_eaten', 'name')[:max_rows]
     context['aging'] = models.Meal.objects.filter(common=True, owner=userid).select_related(
             ).order_by('last_eaten', '-rating', 'name')[:max_rows]
+    context['cl'] = ['tan', 'green', 'cyan', 'orange', 'red']
     return render(request, 'dinner.html', context)
 
 def meal_tip(request):

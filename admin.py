@@ -36,6 +36,11 @@ class EatenAdmin(admin.ModelAdmin):
 
 admin.site.register(Eaten, EatenAdmin)
 
+class FoodTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'color', 'created')
+
+admin.site.register(FoodType, FoodTypeAdmin)
+
 
 from django.db.models import get_models, get_app
 from django.contrib import admin

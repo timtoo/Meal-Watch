@@ -6,9 +6,9 @@
           <table class="table">
           <tbody>
           {% for meal in latest %}
-          <tr id="lm-{{meal.id}}-{{meal.meal_id}}" class="atip">
+          <tr id="lm-{{meal.id}}-{{meal.meal__id}}" class="atip">
             <td style="width:1%; white-space: nowrap">{{ meal.date|date:"M j (D.)" }}</span></td>
-            <td>{{ meal.meal|capfirst }}{% if meal.common %}*{% endif %}</td>
+            <td>{% if meal.meal__foodtype__color %}<div style="float:left; width:0.8em; height:0.8em; border-radius:0.4em; border:1px solid black; background-color: #{{meal.meal__foodtype__color}}; margin-top: 0.2em; margin-right: 0.25em"></div> {% endif %}{{ meal.meal__name|capfirst }}{% if meal.meal__common %}*{% endif %}</td>
           </tr>
           {% endfor %}
 
