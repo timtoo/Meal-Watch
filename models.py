@@ -17,6 +17,7 @@ class MealType(models.Model):
 class FoodType(models.Model):
     name = models.CharField(max_length=32, unique=True)
     created = models.DateTimeField(auto_now_add=True)
+    color = models.CharField(max_length=6, blank=True, default='')
     owner = models.ForeignKey(User)
 
     class Meta:
