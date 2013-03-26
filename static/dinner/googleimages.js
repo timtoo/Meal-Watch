@@ -25,6 +25,7 @@ function searchComplete() {
       aContainer.target = '_blank';
       newImg.src=result.tbUrl;
       newImg.height='100';
+      newImg.style.max_width='200';
 
       aContainer.appendChild(newImg);
       imgContainer.style.cssFloat = "left";

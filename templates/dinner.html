@@ -8,7 +8,7 @@
           {% for meal in latest %}
           <tr id="lm-{{meal.id}}-{{meal.meal__id}}" class="atip">
             <td style="width:1%; white-space: nowrap">{{ meal.date|date:"M j (D.)" }}</span></td>
-            <td>{% if meal.meal__foodtype__color %}<div style="float:left; width:0.8em; height:0.8em; border-radius:0.4em; border:1px solid black; background-color: #{{meal.meal__foodtype__color}}; margin-top: 0.2em; margin-right: 0.25em"></div> {% endif %}{{ meal.meal__name|capfirst }}{% if meal.meal__common %}*{% endif %}</td>
+            <td>{% if meal.meal__foodtype__color %}<div class="circle" style="background-color: #{{meal.meal__foodtype__color}}"></div> {% endif %}{{ meal.meal__name|capfirst }}{% if meal.meal__common %}*{% endif %}</td>
           </tr>
           {% endfor %}
 
@@ -23,7 +23,7 @@
           {% for meal in popular %}
           <tr id="pm-0-{{meal.id}}" class="atip">
             <td style="width:1%; white-space: nowrap; text-align: right">{{ meal.eaten__count }}</td>
-            <td>{{ meal.name|capfirst }}</td>
+            <td>{% if meal.foodtype__color %}<div class="circle" style="background-color: #{{meal.foodtype__color}}"></div> {% endif %}{{ meal.name|capfirst }}</td>
           </tr>
           {% endfor %}
 
@@ -38,7 +38,7 @@
           {% for meal in aging %}
           <tr id="am-0-{{meal.id}}" class="atip">
             <td style="width:1%; white-space: nowrap">{{ meal.last_eaten|default_if_none:"Never" }}</td>
-            <td>{{ meal.name|capfirst }}</td>
+            <td>{% if meal.foodtype__color %}<div class="circle" style="background-color: #{{meal.foodtype__color}}"></div> {% endif %}{{ meal.name|capfirst }}</td>
           </tr>
           {% endfor %}
 
@@ -65,7 +65,6 @@ $(document).tooltip({
         });
     },
 });
-
 
 });
 

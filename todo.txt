@@ -1,5 +1,4 @@
 - update average ratings on rating insert
-- update eaten counts on eaten insert
 - better display to denote popular/unpopular?
 - constrain to "dinner"
 - individual record display in popup?

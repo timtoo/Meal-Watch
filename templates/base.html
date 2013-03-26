@@ -20,6 +20,9 @@
     .hero { margin-bottom: 1em }
     .ui-tooltip { background: #666; color: white; }
     .ui-widget { font-size: 1em; font-family: inherit; }
+    .circle { float:left; width:0.6em; height:0.6em; border-radius:50%;
+            border:1px solid black; background-color: white;
+            margin-top: 0.35em; margin-right: 0.25em }
   </style>
 
 </head>
@@ -52,7 +55,7 @@
             <table id="random-suggestions" style="margin-left: 5em; margin-bottom: 2em">
             {% for meal in random %}
             <tr>
-            <td>{{ meal.name|capfirst }}{% if meal.common %}*{% endif %}</td>
+            <td>{% if meal.foodtype__color %}<div class="circle" style="background-color: #{{meal.foodtype__color}}"></div> {% endif %}{{ meal.name|capfirst }}{% if meal.common %}*{% endif %}</td>
             </tr>
             {% endfor %}
             </table>
