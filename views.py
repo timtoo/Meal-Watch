@@ -40,7 +40,7 @@ def overview(request, userid):
             '-eaten__count','-last_eaten', 'name')[:max_rows]
     context['aging'] = models.Meal.objects.filter(
             common=True, owner=userid).values(
-            'name', 'last_eaten', 'rating', 'foodtype__color', 'foodtype__name',
+            'id', 'name', 'last_eaten', 'rating', 'foodtype__color', 'foodtype__name',
             ).order_by('last_eaten', '-rating', 'name')[:max_rows]
     context['cl'] = ['tan', 'green', 'cyan', 'orange', 'red']
     return render(request, 'dinner.html', context)

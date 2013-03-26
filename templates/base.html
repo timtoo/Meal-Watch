@@ -7,10 +7,8 @@
   <link rel="stylesheet" href="/static/dinner/style.css">
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
   <script src="https://www.google.com/jsapi"></script>
   <script>var image_search_terms="{% for w in random_names %}{{w}} {% endfor %}";</script>
-  <script src="/static/dinner/googleimages.js"></script>
   <title>What's for Dinner</title>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
@@ -112,6 +110,11 @@ But, why can't software predict what groceries I'm likely to want at any given t
 
 {% block bottom %}
 {% endblock %}
+
+<script src="http://code.jquery.com/jquery-migrate-1.1.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script src="/static/dinner/googleimages.js"></script>
+<script src="/static/dinner/jquery.qtip-1.0.0-rc3.min.js"></script>
 
 </body>
 </html>

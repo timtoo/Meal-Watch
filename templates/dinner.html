@@ -53,7 +53,7 @@
 $(document).ready(
     function() {
 
-$(document).tooltip({
+/*$(document).tooltip({
     items:'.atip',
     tooltipClass:'ttclass',
     track: true,
@@ -64,7 +64,17 @@ $(document).tooltip({
             callback(data);
         });
     },
+});*/
+
+$('.atip').each( function() {
+    console.log(this.id);
+    $(this).qtip({
+        content: { url: '../mealtip',  data: {id:this.id} },
+        style: { name: 'blue', width: 250 },
+        position: { target: 'mouse', adjust: { screen: true } }
+    });
 });
+
 
 });
 
