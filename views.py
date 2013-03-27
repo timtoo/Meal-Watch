@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.utils import timezone
 from django.db.models import Count
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+
+from django.contrib.auth.decorators import login_required
 
 from datetime import timedelta
 
@@ -28,7 +30,6 @@ def overview(request, userid):
     context['random'] = models.Meal.objects.filter(owner=userid).values(
             'name', 'rating', 'foodtype__color', 'foodtype__name', 'common',
             ).order_by('?')[:3]
-    context['random_names'] = [ x['name'] for x in context['random'] ]
     context['latest'] = models.Eaten.objects.filter(
             meal__owner=userid).values(
             'date', 'meal__name', 'meal__id', 'id', 'meal__common', 'meal__foodtype__color', 'meal__foodtype__name',
@@ -42,7 +43,8 @@ def overview(request, userid):
             common=True, owner=userid).values(
             'id', 'name', 'last_eaten', 'rating', 'foodtype__color', 'foodtype__name',
             ).order_by('last_eaten', '-rating', 'name')[:max_rows]
-    context['cl'] = ['tan', 'green', 'cyan', 'orange', 'red']
+    context['random_names'] = [ "%s %s" % (x['name'], x['foodtype__name']) for x in context['random'] ]
+    context['random_names'].insert(0, 'recipe')
     return render(request, 'dinner.html', context)
 
 def meal_tip(request):
@@ -65,4 +67,10 @@ def meal_tip(request):
             html.append('<hr>' + meal.notes)
 
     return HttpResponse(''.join(html))
+
+def overview_redirect(request):
+    """Redirect to the logged in user's overview page"""
+    return HttpResponseRedirect('/dinner/%s/' % request.user.id)
+
+
 

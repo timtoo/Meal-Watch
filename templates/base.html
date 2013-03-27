@@ -33,8 +33,11 @@
 
       <nav class="menu_main">
         <ul>
-          <li class="active"><a href="#" onclick="javascript:document.getElementById('about').style.display = 'block'">About</a></li>
-          <li><a href="/admin/dinner/">Admin</a></li>
+          <li>{% if user.is_authenticated %}
+          <a href="/dinner/{{user.id}}">{{ user.username }}'s Meals</a> /
+          <a href="/admin/dinner">Admin</a> /
+          <a href="/dinner/logout">Logout</a>
+          {% else %}<a href="/dinner/login">Login</a>{% endif %}</li>
         </ul>
       </nav>
     </header>
@@ -45,15 +48,15 @@
     <article class="hero clearfix">
         <div class="col_100">
 
-          <div style="float: right; padding-right: 50px" id="image-container"><div id="google-images"></div><div style="text-align: right; font-size: 7pt; color: #ccc;">Random images via <a style="color: inherit" href="http://images.google.com" target="_blank">Google</a></div></div>
 {% block bluebar %}
+          <div style="float: right; padding-right: 50px" id="image-container"><div id="google-images"></div><div style="text-align: right; font-size: 7pt; color: #ccc;">Random images via <a style="color: inherit" href="http://images.google.com" target="_blank">Google</a></div></div>
         <div style="float:left">
           <h1>Some random suggestions:</h1>
 
             <table id="random-suggestions" style="margin-left: 5em; margin-bottom: 2em">
             {% for meal in random %}
             <tr>
-            <td>{% if meal.foodtype__color %}<div class="circle" style="background-color: #{{meal.foodtype__color}}"></div> {% endif %}{{ meal.name|capfirst }}{% if meal.common %}*{% endif %}</td>
+            <td>{% if meal.foodtype__color %}<div title="{{meal.foodtype__name}}" class="circle" style="background-color: #{{meal.foodtype__color}}"></div> {% endif %}{{ meal.name|capfirst }}{% if meal.common %}*{% endif %}</td>
             </tr>
             {% endfor %}
             </table>
