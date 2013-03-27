@@ -8,7 +8,7 @@
           {% for meal in latest %}
           <tr id="lm-{{meal.id}}-{{meal.meal__id}}" class="atip">
             <td style="width:1%; white-space: nowrap">{{ meal.date|date:"M j (D.)" }}</span></td>
-            <td>{% if meal.meal__foodtype__color %}<div class="circle" style="background-color: #{{meal.meal__foodtype__color}}"></div> {% endif %}{{ meal.meal__name|capfirst }}{% if meal.meal__common %}*{% endif %}</td>
+            <td style="overflow:hidden">{% if meal.meal__foodtype__color %}<div class="circle" style="background-color: #{{meal.meal__foodtype__color}}"></div> {% endif %}{{ meal.meal__name|capfirst }}{% if meal.meal__common %}*{% endif %}</td>
           </tr>
           {% endfor %}
 
