@@ -67,12 +67,28 @@ $(document).ready(
 });*/
 
 $('.atip').each( function() {
-    console.log(this.id);
     $(this).qtip({
-        content: { url: '../mealtip',  data: {id:this.id} },
-        style: { name: 'blue', width: 250 },
-        position: { target: 'mouse', adjust: { screen: true } }
+        content: {
+            ajax: {
+                url: "../mealtip",
+                data: { id: this.id }
+            },
+            text: "Loading..."
+        },
+        style: {
+            width: 250,
+            classes: "qtip-blue qtip-shadow"
+        },
+        position: {
+            target: "mouse",
+            adjust: {
+                method: "flipinvert flipinvert",
+                y: 12
+            },
+            viewport: $(window)
+        }
     });
+
 });
 
 

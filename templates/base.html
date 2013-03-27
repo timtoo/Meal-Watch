@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link href="/static/dinner/favicon.ico" rel="shortcut icon">
   <link rel="stylesheet" href="/static/dinner/style.css">
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
+  <!-- link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" -->
+  <link rel="stylesheet" href="/static/dinner/jquery.qtip.min.css">
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script src="https://www.google.com/jsapi"></script>
-  <script>var image_search_terms="{% for w in random_names %}{{w}} {% endfor %}";</script>
   <title>What's for Dinner</title>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
@@ -21,6 +21,10 @@
     .circle { float:left; width:0.6em; height:0.6em; border-radius:50%;
             border:1px solid black; background-color: white;
             margin-top: 0.35em; margin-right: 0.25em }
+    .qtip {
+        font-size: inherit;
+        line-height: inherit;
+    }
   </style>
 
 </head>
@@ -98,26 +102,25 @@
     </div>
 
     <footer class="footer clearfix">
+{% block footer %}
     &nbsp;
+{% endblock footer %}
     </footer>
 
   </div>
 
-<div id="about" style="display: none; position: absolute; border: 3px solid green; background:white; padding: 1em; top: 5em; bottom: 12em; right: 12em; left: 12em">
-<div style="float: right"><a href="#" onclick="javascript:document.getElementById('about').style.display = 'none'">Close Window</a></div>
-<h1>This will explain everything.</h1>
-
-But, why can't software predict what groceries I'm likely to want at any given time, based on analysis of old shopping receipts? Since we often by similar quantities of similiar products at relatively regular intervals...
-
-</div>
 
 {% block bottom %}
 {% endblock %}
 
-<script src="http://code.jquery.com/jquery-migrate-1.1.1.js"></script>
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<!-- script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script -->
+
+{% block extrascripts %}
+<script src="/static/dinner/jquery.qtip.min.js"></script>
+<script>var image_search_terms="{% for w in random_names %}{{w}} {% endfor %}";</script>
 <script src="/static/dinner/googleimages.js"></script>
-<script src="/static/dinner/jquery.qtip-1.0.0-rc3.min.js"></script>
+{% endblock extrascripts %}
+
 
 </body>
 </html>
