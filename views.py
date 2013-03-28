@@ -2,12 +2,15 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
+from django.forms import ModelForm, Form
 
 from django.contrib.auth.decorators import login_required
 
 from datetime import timedelta
 
 from dinner import models
+
+LOGIN_URL = '/dinner/login'
 
 
 def date_delta(days):
@@ -45,6 +48,7 @@ def overview(request, userid):
             ).order_by('last_eaten', '-rating', 'name')[:max_rows]
     context['random_names'] = [ "%s %s" % (x['name'], x['foodtype__name']) for x in context['random'] ]
     context['random_names'].insert(0, 'recipe')
+    context['form'] = EatenForm()
     return render(request, 'dinner.html', context)
 
 def meal_tip(request):
@@ -72,5 +76,37 @@ def overview_redirect(request):
     """Redirect to the logged in user's overview page"""
     return HttpResponseRedirect('/dinner/%s/' % request.user.id)
 
+@login_required(login_url=LOGIN_URL)
+def eaten(request):
+    """Listen all eaten meals"""
+    eaten = models.Eaten.objects.filter(
+            meal__owner=request.user.id).values(
+            'date', 'meal__name', 'meal__id', 'id', 'meal__common', 'meal__foodtype__color', 'meal__foodtype__name',
+            ).order_by('-date')[:100]
+    return render(request, 'eaten.html', { 'eaten': eaten })
+
+@login_required(login_url=LOGIN_URL)
+def meals(request):
+    """List all meals"""
+    return ''
+
+@login_required(login_url=LOGIN_URL)
+def meal(request, meal_id):
+    """Display info on a single meal"""
+    return ""
+
+@login_required(login_url=LOGIN_URL)
+def foodtypes(request):
+    """List food types"""
+    return ''
+
+@login_required(login_url=LOGIN_URL)
+def add_eaten(request):
+    """Validate insert/update eaten record"""
+    return ""
+
+class EatenForm(ModelForm):
+    class Meta:
+        model = models.Eaten
 
 

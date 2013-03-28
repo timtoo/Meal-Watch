@@ -47,9 +47,10 @@
           {% if user.is_authenticated %}
           <li><a id="user_menu" href="/dinner/{{user.id}}">{{ user.username }}'s Meals</a>
               <ul id="dropdown" class="menu" style="display:none; width:auto">
-                  <li><a href="#">Eaten</a></li>
-                 <li><a href="#">Meal Names</a></li>
-                  <li><a href="#">Food Types</a></li>
+                  <li><a href="#" onclick="enter_eaten()">Add Meal</a></li>
+                  <li><a href="/dinner/eaten">List Meals</a></li>
+                 <li><a href="/dinner/meals">Meal Names</a></li>
+                  <li><a href="/dinner/foodtypes">Food Types</a></li>
               </ul>
           </li>
           <li><a href="/dinner/logout">Logout</a></li>
@@ -135,8 +136,13 @@ $(document).ready(function() {
     $('#main_menu').menubar({autoExpand: true});
     console.log('ready');
 });
+
+var enter_eaten = function() {
+    alert('not implemented yet');
+}
 </script>
 
+{{ form }}
 
 {% block extrascripts %}
 <script src="/static/dinner/jquery.qtip.min.js"></script>
