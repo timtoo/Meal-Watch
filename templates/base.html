@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link href="/static/dinner/favicon.ico" rel="shortcut icon">
   <link rel="stylesheet" href="/static/dinner/style.css">
-  <!-- link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" -->
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/mint-choc/jquery-ui.css">
   <link rel="stylesheet" href="/static/dinner/jquery.qtip.min.css">
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script src="https://www.google.com/jsapi"></script>
@@ -26,6 +26,12 @@
         font-size: inherit;
         line-height: inherit;
     }
+    .ui-menubar { list-style: none; margin: 0; padding-left: 0; }
+    .ui-menubar-item { float: left; }
+    .ui-menubar .ui-button { float: left; font-weight: normal; border-top-width: 0 !important; border-bottom-width: 0 !important; margin: 0; outline: none; }
+    .ui-menubar .ui-menubar-link { border-right: 1px dashed transparent; border-left: 1px dashed transparent; }
+    .ui-menubar .ui-menu { width: 200px; position: absolute; z-index: 9999; font-weight: normal; }
+
   </style>
 
 </head>
@@ -36,13 +42,20 @@
     <header class="header clearfix" style="padding-top: 1em; padding-bottom: 1em" >
       <div class="logo">What&rsquo;s for Dinner?</div>
 
-      <nav class="menu_main">
-        <ul>
-          <li>{% if user.is_authenticated %}
-          <a href="/dinner/{{user.id}}">{{ user.username }}'s Meals</a> /
-          <a href="/admin/dinner">Admin</a> /
-          <a href="/dinner/logout">Logout</a>
-          {% else %}<a href="/dinner/login">Login</a>{% endif %}</li>
+      <nav class="xmenu_main" style="float:right; width:auto; white-space:nowrap">
+        <ul id="main_menu" class="menubar" style="text-align: left; background:none; border:none; color: white">
+          {% if user.is_authenticated %}
+          <li><a id="user_menu" href="/dinner/{{user.id}}">{{ user.username }}'s Meals</a>
+              <ul id="dropdown" class="menu" style="display:none; width:auto">
+                  <li><a href="#">Eaten</a></li>
+                 <li><a href="#">Meal Names</a></li>
+                  <li><a href="#">Food Types</a></li>
+              </ul>
+          </li>
+          <li><a href="/dinner/logout">Logout</a></li>
+          {% else %}
+          <li><a href="/dinner/login">Login</a></li>
+          {% endif %}
         </ul>
       </nav>
     </header>
@@ -114,7 +127,16 @@
 {% block bottom %}
 {% endblock %}
 
-<!-- script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script -->
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script src="/static/dinner/jquery.ui.menubar.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#main_menu').menubar({autoExpand: true});
+    console.log('ready');
+});
+</script>
+
 
 {% block extrascripts %}
 <script src="/static/dinner/jquery.qtip.min.js"></script>
