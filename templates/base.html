@@ -4,28 +4,97 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link href="/static/dinner/favicon.ico" rel="shortcut icon">
-  <link rel="stylesheet" href="/static/dinner/style.css">
+  <link rel="stylesheet" href="/static/dinner/sstyle.css">
+  <link rel="stylesheet" href="/static/dinner/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="/static/dinner/bootstrap/css/bootstrap-responsive.css">
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/mint-choc/jquery-ui.css">
   <link rel="stylesheet" href="/static/dinner/jquery.qtip.min.css">
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script src="https://www.google.com/jsapi"></script>
   <title>What's for Dinner</title>
-  <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <style>
-    h1 { margin-top: 0.5em }
-    h2 { margin-top: 0.5em }
+    body { background: #f2f2f2; font-size: 1rem }
+    h1 { margin-top: 0.5em; font-size: 180% }
+    h2 { margin-top: 0em; margin-bottom: 0.5em; font-weight: normal; font-size: 150% }
     td { vertical-align: top }
-    .hero { margin-bottom: 1em }
-    .ui-tooltip { background: #666; color: white; }
-    .ui-widget { font-size: 1em; font-family: inherit; }
-    .circle { float:left; width:0.6em; height:0.6em; border-radius:50%;
-            border:1px solid black; background-color: white;
-            margin-top: 0.35em; margin-right: 0.25em }
+    tr { border-spacing: 0 }
+
+    .table td { padding: 4px }
+    #image-container img { height: 100px }
+
+    table.table-nolines th, table.table-nolines td {
+         border-top: none;
+     }
+
+    footer {
+        box-shadow: #d8d8d8 0px -1px 5px;
+        padding:2em 2% 5em 2%;
+        background: #000;
+        color: #666;
+        height: 100%;
+    }
+
+    #header {
+        display: block;
+        padding: 1em 20px 1em 20px;
+        color:#ededed;
+        background:#313131;
+        border-bottom:1px solid #88c8f6;
+    }
+
+    #header h1 {
+      xfloat:left;
+      display:inline-block;
+      font-weight: normal;
+      color:#ededed;
+      margin-top: 0px;
+      margin-bottom: 1px;
+    }
+
+    #subheader {
+      background:#499cd7;
+      color:#fff;
+      border-bottom:1px solid #fff;
+      padding: 0.5em 20px 0.5em 20px;
+      margin-bottom: 0.5em;
+      position:relative;
+    }
+
+    #subheader h2 {
+        font-size: 180%;
+        font-weight: normal;
+        margin-top: 0px;
+        margin-bottom: 0.5em;
+    }
+
+    .span4 h3 {
+        font-weight: normal;
+        display: inline-block;
+    }
+    .span4 h3+span {
+        color: grey;
+        font-size: 70%;
+    }
+
+    .circle {
+        float:left;
+        width:0.6em;
+        height:0.6em; border-radius:50%;
+        border:1px solid black;
+        background-color: white;
+        margin-top: 0.35em;
+        margin-right: 0.25em
+    }
+
     .qtip {
         font-size: inherit;
         line-height: inherit;
     }
+
+    .ui-tooltip { background: #666; color: white; }
+    .ui-widget { font-size: 1em; font-family: inherit; }
+
     .ui-menubar { list-style: none; margin: 0; padding-left: 0; }
     .ui-menubar-item { float: left; }
     .ui-menubar .ui-button { float: left; font-weight: normal; border-top-width: 0 !important; border-bottom-width: 0 !important; margin: 0; outline: none; }
@@ -37,10 +106,9 @@
 </head>
 
 <body>
-  <div class="container">
+  <div id="header">
 
-    <header class="header clearfix" style="padding-top: 1em; padding-bottom: 1em" >
-      <div class="logo">What&rsquo;s for Dinner?</div>
+      <h1 class="logo">What&rsquo;s for Dinner?</h1>
 
       <nav class="xmenu_main" style="float:right; width:auto; white-space:nowrap">
         <ul id="main_menu" class="menubar" style="text-align: left; background:none; border:none; color: white">
@@ -59,35 +127,32 @@
           {% endif %}
         </ul>
       </nav>
-    </header>
+    </div>
 
 
-    <div class="info">
-
-    <article class="hero clearfix">
-        <div class="col_100">
+    <div id="subheader">
 
 {% block bluebar %}
-          <div style="float: right; padding-right: 50px" id="image-container"><div id="google-images"></div><div style="text-align: right; font-size: 7pt; color: #ccc;">Random images via <a style="color: inherit" href="http://images.google.com" target="_blank">Google</a></div></div>
-        <div style="float:left">
-          <h1>Some random suggestions:</h1>
+          <div style="float: right; padding-right: 50px; margin-top: 0.5em" id="image-container"><div id="google-images"></div><div style="text-align: right; font-size: 7pt; color: #ccc;">Random images via <a style="color: inherit" href="http://images.google.com" target="_blank">Google</a></div></div>
+          <h2>Some random suggestions:</h2>
 
-            <table id="random-suggestions" style="margin-left: 5em; margin-bottom: 2em">
+            <table id="random-suggestions" style="margin-left: 5em; margin-bottom: 1em">
             {% for meal in random %}
             <tr>
             <td>{% if meal.foodtype__color %}<div title="{{meal.foodtype__name}}" class="circle" style="background-color: #{{meal.foodtype__color}}"></div> {% endif %}{{ meal.name|capfirst }}{% if meal.common %}*{% endif %}</td>
             </tr>
             {% endfor %}
             </table>
-            </div>
 {% endblock %}
-        </div>
-      </article>
+      </div>
 
-      <article class="article clearfix">
+  <div class="container-fluid">
+    <div class="row-fluid">
+
+      <article class="article">
 {% block content %}
-        <div class="col_33">
-          <h2>We're here to help with...</h2>
+        <div class="span4">
+          <h3>We're here to help with...</h3>
           <ul>
             <li>Random suggestions
             <li>A list of what you've had lately
@@ -96,33 +161,32 @@
           </ul>
         </div>
 
-        <div class="col_33">
-          <h2>All you have to do...</span></h2>
+        <div class="span4">
+          <h3>All you have to do...</span></h3>
           <ul>
             <li>Sign up for an account
             <li>Simply add your meals each day
           <ul>
         </div>
 
-        <div class="col_33">
-          <h2>Why?</h2>
+        <div class="span4">
+          <h3>Why?</h3>
           <p>Every day as dinner time approaches the eternal question looms: what's for dinner?
           <p>Some days you just want a little help not to have to think about it.
         </div>
 
 {% endblock %}
-
-        <div class="clearfix"></div>
-
+        </div>
+        </article>
     </div>
+</div>
 
-    <footer class="footer clearfix">
+    <footer class="footer" style="background: #fff">
 {% block footer %}
     &nbsp;
 {% endblock footer %}
     </footer>
 
-  </div>
 
 
 {% block bottom %}
@@ -130,6 +194,7 @@
 
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script src="/static/dinner/jquery.ui.menubar.js"></script>
+<script src="/static/dinner/bootstrap/js/bootstrap.js"></script>
 
 <script>
 $(document).ready(function() {
@@ -141,8 +206,6 @@ var enter_eaten = function() {
     alert('not implemented yet');
 }
 </script>
-
-{{ form }}
 
 {% block extrascripts %}
 <script src="/static/dinner/jquery.qtip.min.js"></script>
