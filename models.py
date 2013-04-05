@@ -76,9 +76,9 @@ class PeopleRating(models.Model):
 
 class Eaten(models.Model):
     date = models.DateField(db_index=True)
-    created = models.DateTimeField(auto_now_add=True)
-    notes = models.TextField(blank=True)
     meal = models.ForeignKey(Meal)
+    notes = models.TextField(blank=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = [ 'date' ]

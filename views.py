@@ -6,6 +6,9 @@ from django.forms import ModelForm, Form
 
 from django.contrib.auth.decorators import login_required
 
+from crispy_forms.helper import FormHelper
+from crispy_forms import layout, bootstrap
+
 from datetime import timedelta
 
 from dinner import models
@@ -103,10 +106,32 @@ def foodtypes(request):
 @login_required(login_url=LOGIN_URL)
 def add_eaten(request):
     """Validate insert/update eaten record"""
-    return ""
+    form = EatenForm()
+    return render(request, 'eaten_add.html', {'form': form})
+
+@login_required
+def kse(request):
+    """for testing"""
+    return render(request, '_kse.html')
+
 
 class EatenForm(ModelForm):
     class Meta:
         model = models.Eaten
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_class='form-horizontal'
+        self.helper.form_action='add_eaten'
+        self.helper.add_input(layout.Submit('submit', 'Submit'))
+        self.helper.layout = layout.Layout(
+            layout.Div(bootstrap.AppendedText('date', '<i class="icon-calendar"></i>')),
+            'meal',
+            'notes',)
+        print self.helper.layout.fields
+
+        super(EatenForm, self).__init__(*args, **kwargs)
+
+
 
 

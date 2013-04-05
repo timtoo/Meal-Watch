@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link href="/static/dinner/favicon.ico" rel="shortcut icon">
-  <link rel="stylesheet" href="/static/dinner/sstyle.css">
   <link rel="stylesheet" href="/static/dinner/bootstrap/css/bootstrap.css">
   <link rel="stylesheet" href="/static/dinner/bootstrap/css/bootstrap-responsive.css">
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/mint-choc/jquery-ui.css">
@@ -50,6 +49,14 @@
       color:#ededed;
       margin-top: 0px;
       margin-bottom: 1px;
+    }
+
+    ul#main_menu>li>a {
+        color: #eee;
+    }
+
+    ul#main_menu>li>a:hover,ul#main_menu>li>a:focus {
+        color: #000;
     }
 
     #subheader {
@@ -102,6 +109,7 @@
     .ui-menubar .ui-menu { width: 200px; position: absolute; z-index: 9999; font-weight: normal; }
 
   </style>
+{% block header %}{% endblock %}
 
 </head>
 
@@ -110,12 +118,14 @@
 
       <h1 class="logo">What&rsquo;s for Dinner?</h1>
 
-      <nav class="xmenu_main" style="float:right; width:auto; white-space:nowrap">
-        <ul id="main_menu" class="menubar" style="text-align: left; background:none; border:none; color: white">
+      <nav style="float:right; width:auto; white-space:nowrap">
+        <ul id="main_menu" class="nav nav-pills">
           {% if user.is_authenticated %}
-          <li><a id="user_menu" href="/dinner/{{user.id}}">{{ user.username }}'s Meals</a>
-              <ul id="dropdown" class="menu" style="display:none; width:auto">
-                  <li><a href="#" onclick="enter_eaten()">Add Meal</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" tmp="/dinner/{{user.id}}">{{ user.username }}'s Meals <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                  <li><a href="/dinner/{{ user.id }}/">Meal Overview</a></li>
+                  <li><a href="#" xonclick="enter_eaten()">Add Meal</a></li>
                   <li><a href="/dinner/eaten">List Meals</a></li>
                  <li><a href="/dinner/meals">Meal Names</a></li>
                   <li><a href="/dinner/foodtypes">Food Types</a></li>
@@ -192,13 +202,13 @@
 {% block bottom %}
 {% endblock %}
 
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-<script src="/static/dinner/jquery.ui.menubar.js"></script>
+<!-- script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script -->
+<!-- script src="/static/dinner/jquery.ui.menubar.js"></script -->
 <script src="/static/dinner/bootstrap/js/bootstrap.js"></script>
 
 <script>
 $(document).ready(function() {
-    $('#main_menu').menubar({autoExpand: true});
+//    $('#main_menu').menubar({autoExpand: true});
     console.log('ready');
 });
 

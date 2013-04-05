@@ -1,0 +1,11 @@
+{% load crispy_forms_tags %}
+{% crispy form form.helper 'bootstrap' %}
+
+<script src="/static/dinner/dinner.js"></script>
+<script>
+    f = document.getElementById('id_date');
+    if (! f.value) {
+//        f.value = today();
+    }
+</script>
+

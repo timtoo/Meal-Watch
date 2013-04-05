@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block header %}
+<link rel="stylesheet" type="text/css" href="/static/dinner/bootstrap/css/datepicker.css">
+{% endblock header %}
+
+{% block content %}
+
+{% include 'eaten_add_form.html' %}
+
+{% endblock content %}
+
+{% block extrascripts %}
+<script src="/static/dinner/bootstrap/js/bootstrap-datepicker.js"></script>
+<script>
+$(document).ready(function() {
+    $('.dateinput').datepicker({ format: "yyyy/mm/dd", autoclose: true });
+});
+</script>
+{% endblock %}
