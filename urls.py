@@ -10,6 +10,7 @@ urlpatterns = patterns('dinner.views',
     url(r'^add_eaten$', 'add_eaten'),
     url(r'^overview_redirect$', 'overview_redirect'),
     url(r'^mealtip$', 'meal_tip'),
+    url(r'^kse$', 'kse'),
 )
 
 urlpatterns += patterns('',
