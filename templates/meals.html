@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% block header %}
+  <link rel="stylesheet" href="/static/dinner/DataTables/css/jquery.dataTables.css">
+{% endblock %}
+
 {% block bluebar %}
 <h2>Meals:</h2>
 {% endblock %}
@@ -33,3 +37,14 @@
 
 
 {% endblock content %}
+
+{% block bottom %}
+<script src="/static/dinner/DataTables/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function() {
+    $("table").dataTable();
+});
+
+</script>
+
+{% endblock %}
