@@ -91,7 +91,8 @@ def eaten(request):
 @login_required(login_url=LOGIN_URL)
 def meals(request):
     """List all meals"""
-    return ''
+    meals = models.Meal.objects.all()
+    return render(request, 'meals.html', { 'meals': meals })
 
 @login_required(login_url=LOGIN_URL)
 def meal(request, meal_id):

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block bluebar %}
+<h2>Meals:</h2>
+{% endblock %}
+{% block content %}
+<table class="table table-striped table-xnolines">
+<thead>
+<tr>
+<th>Meal Name</th>
+<th>Type</th>
+<th>Com.</th>
+<th>Frz.</th>
+<th>Rating</th>
+<th>Last Eatan</th>
+<th>Created</th>
+</tr>
+</thead>
+<tbody>
+{% for m in meals %}
+<tr>
+<td>{{ m.name }}</td>
+<td>{{ m.foodtype.name }}</td>
+<td>{{ m.common }}</td>
+<td>{{ m.freezable }}</td>
+<td>{{ m.rating | default_if_none:" " }}</td>
+<td>{{ m.last_eaten | default_if_none:" "  | date:"Y-m-d" }}</td>
+<td>{{ m.created | date:"Y-m-d" }}</td>
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+
+
+{% endblock content %}
