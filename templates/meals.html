@@ -42,7 +42,13 @@
 <script src="/static/dinner/DataTables/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function() {
-    $("table").dataTable();
+    $("table").dataTable({
+            "bPaginate": false,
+            "fnInitComplete": function(oSettings, json) {
+                    // move search box into header
+                    $('#DataTables_Table_0_filter').prependTo('#subheader');
+                      }
+            });
 });
 
 </script>
