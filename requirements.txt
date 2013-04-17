@@ -1,0 +1,7 @@
+south
+django-debug-toolbar
+django-crispy-forms
+
+# javascript: bootstrap
+# javascript: DataTables
+# javascript: quetip
