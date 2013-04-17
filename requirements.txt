@@ -5,3 +5,6 @@ django-crispy-forms
 # javascript: bootstrap
 # javascript: DataTables
 # javascript: quetip
+
+# settings: from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+# settings: TEMPLATE_CONTEXT_PROCESSORS = TCP + ('django.core.context_processors.request',)
