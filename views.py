@@ -89,7 +89,7 @@ def eaten(request):
     return render(request, 'eaten.html', { 'eaten': eaten })
 
 @login_required(login_url=LOGIN_URL)
-def meals(request):
+def meals(request, userid):
     """List all meals"""
     meals = models.Meal.objects.all()
     return render(request, 'meals.html', { 'meals': meals })
@@ -105,7 +105,7 @@ def foodtypes(request):
     return ''
 
 @login_required(login_url=LOGIN_URL)
-def add_eaten(request):
+def add_eaten(request, userid):
     """Validate insert/update eaten record"""
     form = EatenForm()
     return render(request, 'eaten_add.html', {'form': form})
