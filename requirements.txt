@@ -1,10 +1,16 @@
 south
-django-debug-toolbar
 django-crispy-forms
+
+# development
+django-debug-toolbar
+django-extensions
+Werkzeug
 
 # javascript: bootstrap
 # javascript: DataTables
-# javascript: quetip
+# javascript: qtip
+# javascript: select2
 
 # settings: from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 # settings: TEMPLATE_CONTEXT_PROCESSORS = TCP + ('django.core.context_processors.request',)
+
