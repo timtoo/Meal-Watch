@@ -2,6 +2,7 @@
 
 {% block header %}
 <link rel="stylesheet" type="text/css" href="/static/dinner/bootstrap/css/datepicker.css">
+<link rel="stylesheet" type="text/css" href="/static/dinner/select2/select2.css">
 {% endblock header %}
 
 {% block bluebar %}
@@ -15,10 +16,27 @@
 {% endblock content %}
 
 {% block extrascripts %}
+<script src="/static/dinner/select2/select2.js"></script>
+<script src="/static/dinner/expanding.js"></script>
 <script src="/static/dinner/bootstrap/js/bootstrap-datepicker.js"></script>
 <script>
+var select_data = {{ meal_json|safe }};
+
 $(document).ready(function() {
-    $('.dateinput').datepicker({ format: "yyyy/mm/dd", autoclose: true });
+    $('.dateinput').datepicker({ format: "yyyy-mm-dd", autoclose: true });
+
+    var format = function (item) { if (item.id) return item.name + ' <div class="circle" style="background-color: #' + item.foodtype__color + '"></div><span color="grey">(' + item.foodtype__name + ')</span>'; };
+
+    $('#id_meal').select2({
+        data: { results: select_data, text: function(state) { return state.name + ' ' + state.foodtype__name } },
+        formatSelection: format,
+        formatResult: format,
+        escapeMarkup: function(m) { return m; }
+        });
+
+        $('#id_notes').expandingTextarea();
 });
+
 </script>
+
 {% endblock %}
