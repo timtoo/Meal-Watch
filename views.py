@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
-from django.forms import ModelForm, Form
+from django.forms import ModelForm, Form, TextInput, Textarea
 
 from django.contrib.auth.decorators import login_required
 
@@ -10,6 +10,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms import layout, bootstrap
 
 from datetime import timedelta
+import json
 
 from dinner import models
 
@@ -107,8 +108,16 @@ def foodtypes(request):
 @login_required(login_url=LOGIN_URL)
 def add_eaten(request, userid):
     """Validate insert/update eaten record"""
-    form = EatenForm()
-    return render(request, 'eaten_add.html', {'form': form})
+    if request.method == 'POST':
+        form = EatenForm()
+        if form.is_valid():
+            return HttpResponseRedirect('/thanks/')
+
+    else:
+        form = EatenForm()
+
+    data = models.Meal.objects.values('id', 'name', 'foodtype__id', 'foodtype__name', 'foodtype__color')
+    return render(request, 'eaten_add.html', {'form': form, 'meal_json': json.dumps(list(data))})
 
 @login_required
 def kse(request):
@@ -117,8 +126,12 @@ def kse(request):
 
 
 class EatenForm(ModelForm):
+
     class Meta:
         model = models.Eaten
+        widgets = { 'meal': TextInput(attrs={'max_length': 120, 'style': 'width: 20em'}),
+                    'notes': Textarea(attrs={'rows': 1, 'style': 'width: 22em', 'cols': 40})
+                    }
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -129,7 +142,7 @@ class EatenForm(ModelForm):
             layout.Div(bootstrap.AppendedText('date', '<i class="icon-calendar"></i>')),
             'meal',
             'notes',)
-        print self.helper.layout.fields
+        print "y",self.helper.layout
 
         super(EatenForm, self).__init__(*args, **kwargs)
 
