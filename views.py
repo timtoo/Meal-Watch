@@ -109,10 +109,11 @@ def foodtypes(request):
 def add_eaten(request, userid):
     """Validate insert/update eaten record"""
     if request.method == 'POST':
-        form = EatenForm()
+        form = EatenForm(request.POST)
+        print form.is_valid()
         if form.is_valid():
-            return HttpResponseRedirect('/thanks/')
-
+            meal = form.save()
+            return HttpResponseRedirect('/dinner/%s/?added=%s' % (request.user.id, meal.id))
     else:
         form = EatenForm()
 
