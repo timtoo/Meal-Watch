@@ -90,20 +90,24 @@ def eaten(request):
     return render(request, 'eaten.html', { 'eaten': eaten })
 
 @login_required(login_url=LOGIN_URL)
-def meals(request, userid):
+def meals(request, userid, foodtype=None):
     """List all meals"""
     meals = models.Meal.objects.order_by('foodtype__name', 'name', 'id')
-    return render(request, 'meals.html', { 'meals': meals })
+    if foodtype:
+        meals = meals.filter(foodtype=foodtype)
+        foodtype = models.FoodType.objects.get(id=foodtype)
+    return render(request, 'meals.html', { 'meals': meals, 'foodtype': foodtype })
 
 @login_required(login_url=LOGIN_URL)
-def meal(request, meal_id):
+def meal(request, userid, mealid):
     """Display info on a single meal"""
     return ""
 
 @login_required(login_url=LOGIN_URL)
-def foodtypes(request):
+def foodtypes(request, userid):
     """List food types"""
-    return ''
+    food = models.FoodType.objects.filter(owner=request.user.id).order_by('name', 'id').annotate(Count('meal'))
+    return render(request, 'food_types.html', { 'food': food })
 
 @login_required(login_url=LOGIN_URL)
 def add_eaten(request, userid):
