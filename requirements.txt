@@ -8,9 +8,11 @@ Werkzeug
 
 # javascript: bootstrap     # unzip to static/dinner
 # javascript: DataTables    # unzip and symlink DataTables-?.?.?/media to static/dinner/Datatables
-# javascript: qtip          # bundled
 # javascript: select2       # unzip and symlink select2-master to static/dinner/select2
 # javascript: flot          # unzip to static/dinner/flot
+# javascript: qtip          # bundled
+# javascript: expanding.js  # bundled
+# javascript: bootstrap-datetimepicker  # bundled
 
 # settings: from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 # settings: TEMPLATE_CONTEXT_PROCESSORS = TCP + ('django.core.context_processors.request',)
