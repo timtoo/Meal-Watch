@@ -92,7 +92,7 @@ def eaten(request):
 @login_required(login_url=LOGIN_URL)
 def meals(request, userid):
     """List all meals"""
-    meals = models.Meal.objects.all()
+    meals = models.Meal.objects.order_by('foodtype__name', 'name', 'id')
     return render(request, 'meals.html', { 'meals': meals })
 
 @login_required(login_url=LOGIN_URL)
@@ -113,7 +113,7 @@ def add_eaten(request, userid):
         print form.is_valid()
         if form.is_valid():
             meal = form.save()
-            return HttpResponseRedirect('/dinner/%s/?added=%s' % (request.user.id, meal.id))
+            return HttpResponseRedirect('/dinner/%s/?added=%s-%s' % (request.user.id, meal.id, meal.meal.id))
     else:
         form = EatenForm()
 

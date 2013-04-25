@@ -44,6 +44,7 @@
 $(document).ready(function() {
     $("table").dataTable({
             "bPaginate": false,
+            'aaSorting': [],
             "fnInitComplete": function(oSettings, json) {
                     // move search box into header
                     $('#DataTables_Table_0_filter').prependTo('#subheader');
