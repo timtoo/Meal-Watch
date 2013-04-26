@@ -81,13 +81,13 @@ def overview_redirect(request):
     return HttpResponseRedirect('/dinner/%s/' % request.user.id)
 
 @login_required(login_url=LOGIN_URL)
-def eaten(request):
+def eaten(request, userid):
     """Listen all eaten meals"""
     eaten = models.Eaten.objects.filter(
             meal__owner=request.user.id).values(
             'date', 'meal__name', 'meal__id', 'id', 'meal__common', 'meal__foodtype__color', 'meal__foodtype__name',
             ).order_by('-date')[:100]
-    return render(request, 'eaten.html', { 'eaten': eaten })
+    return render(request, 'eaten.html', { 'meals': eaten })
 
 @login_required(login_url=LOGIN_URL)
 def meals(request, userid, foodtype=None):

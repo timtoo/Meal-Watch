@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('dinner.views',
     url(r'^$', 'index'),
     url(r'^(\d+)/$', 'overview'),
-    url(r'^eaten$', 'eaten'),
+    url(r'^(\d+)/eaten$', 'eaten'),
     url(r'^(\d+)/meals$', 'meals'),
     url(r'^(\d+)/meals/(\d+)$', 'meals'),
     url(r'^(\d+)/meal/(\d+)$', 'meal'),
