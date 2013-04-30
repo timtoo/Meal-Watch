@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from managers import *
+
 RATING_RANGE = zip(range(1,11), range(1,11))
 
 class MealType(models.Model):
@@ -80,8 +82,9 @@ class Eaten(models.Model):
     notes = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
+    objects = EatenManager()
+
     class Meta:
-        ordering = [ 'date' ]
         verbose_name_plural = 'Eaten'
 
     def save(self, *args, **kwargs):

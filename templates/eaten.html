@@ -14,15 +14,17 @@
 <th>Meal Name</th>
 <th>Type</th>
 <th>Rating</th>
+<th style="text-align: right">Times</th>
 </tr>
 </thead>
 <tbody>
-{% for m in meals %}
+{% for m in eaten %}
 <tr>
 <td>{{ m.date | date:"Y-m-d" }}</td>
 <td style="font-weight: 700; color:inherit"><a href="/dinner/{{user.id}}/meal/{{m.meal__id}}">{{ m.meal__name }}</a></td>
 <td>{{ m.meal__foodtype__name }}<div class="circle" style="background-color: #{{m.meal__foodtype__color}}"></div></td>
 <td>{{ m.meal__rating | default_if_none:" " }}</td>
+<td style="text-align: right">{{ m.meal_count }}</td>
 </tr>
 {% endfor %}
 
@@ -39,6 +41,7 @@ $(document).ready(function() {
     $("table").dataTable({
             "bPaginate": true,
             'aaSorting': [],
+            'iDisplayLength': 50,
             "fnInitComplete": function(oSettings, json) {
                     // move search box into header
                     $('#DataTables_Table_0_filter').prependTo('#subheader');

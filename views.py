@@ -86,8 +86,11 @@ def eaten(request, userid):
     eaten = models.Eaten.objects.filter(
             meal__owner=request.user.id).values(
             'date', 'meal__name', 'meal__id', 'id', 'meal__common', 'meal__foodtype__color', 'meal__foodtype__name',
-            ).order_by('-date')[:100]
-    return render(request, 'eaten.html', { 'meals': eaten })
+            ).order_by('-date')[:500]
+
+    eaten = models.Eaten.objects.eaten_with_count(ownerid=request.user.id)
+
+    return render(request, 'eaten.html', { 'eaten': eaten })
 
 @login_required(login_url=LOGIN_URL)
 def meals(request, userid, foodtype=None):
