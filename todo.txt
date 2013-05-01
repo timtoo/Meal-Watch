@@ -1,3 +1,11 @@
+- edit meal
+    - delete eaten (add edit button to eaten list, add delete option to edit page)
+
+- single meal display page
+    - meal details
+    - log of eaten
+
+
 - update average ratings on rating insert
 - better display to denote popular/unpopular?
 - constrain to "dinner"
