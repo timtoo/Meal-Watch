@@ -5,6 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.forms import ModelForm, Form, TextInput, Textarea
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 
 from crispy_forms.helper import FormHelper
 from crispy_forms import layout, bootstrap
@@ -142,6 +144,13 @@ def add_eaten(request, userid):
 def kse(request):
     """for testing"""
     return render(request, '_kse.html')
+
+def auth4tim4testing(request):
+    """instant authenticate as user #1 for testing"""
+    u = User.objects.get(id=1)
+    u.backend = 'django.contrib.auth.backends.ModelBackend'
+    login(request, u)
+    return overview_redirect(request)
 
 
 class EatenForm(ModelForm):

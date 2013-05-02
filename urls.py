@@ -11,6 +11,7 @@ urlpatterns = patterns('dinner.views',
     url(r'^(\d+)/add_eaten$', 'add_eaten'),
     url(r'^overview_redirect$', 'overview_redirect'),
     url(r'^mealtip$', 'meal_tip'),
+    url(r'^auth4tim4testing$', 'auth4tim4testing'),
     url(r'^kse$', 'kse'),
 )
 
