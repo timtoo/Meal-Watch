@@ -98,7 +98,7 @@ def eaten(request, userid):
 def meals(request, userid, foodtype=None):
     """List all meals"""
     title = 'All Meals'
-    meals = models.Meal.objects.order_by('foodtype__name', 'name', 'id')
+    meals = models.Meal.objects.order_by('foodtype__name', 'name', 'id').annotate(Count('eaten'))
     if foodtype:
         meals = meals.filter(foodtype=foodtype)
         foodtype = models.FoodType.objects.get(id=foodtype)

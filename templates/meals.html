@@ -12,9 +12,10 @@
 <tr>
 <th>Meal Name</th>
 <th>Type</th>
-<th>Com.</th>
-<th>Frz.</th>
+<th style="text-align: center" title="Common meal">Com.</th>
+<th style="text-align: center" title="Freezable">Frz.</th>
 <th>Rating</th>
+<th style="text-align: right" title="Times Eaten"><i>x</i></th>
 <th>Last Eaten</th>
 <th>Created</th>
 </tr>
@@ -27,6 +28,7 @@
 <td style="text-align: center; color: {% if m.common %}green{%else%}darkred{%endif%}">{% if m.common %}&#x2714;{% else %}&#x2717;{% endif %}</td>
 <td style="text-align: center; color: {% if m.freezable %}green{%else%}darkred{%endif%}">{% if m.freezable %}&#x2714;{% else %}&#x2717;{% endif %}</td>
 <td>{{ m.rating | default_if_none:" " }}</td>
+<td style="text-align: right">{{m.eaten__count}}</td>
 <td>{{ m.last_eaten | default_if_none:" "  | date:"Y-m-d" }}</td>
 <td>{{ m.created | date:"Y-m-d" }}</td>
 </tr>
