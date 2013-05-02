@@ -91,8 +91,9 @@ def eaten(request, userid):
             ).order_by('-date')[:500]
 
     eaten = models.Eaten.objects.eaten_with_count(ownerid=request.user.id)
+    title = "Meals Eaten"
 
-    return render(request, 'eaten.html', { 'eaten': eaten })
+    return render(request, 'eaten.html', { 'eaten': eaten, 'title': title })
 
 @login_required(login_url=LOGIN_URL)
 def meals(request, userid, foodtype=None):
@@ -138,7 +139,8 @@ def add_eaten(request, userid):
         form = EatenForm()
 
     data = models.Meal.objects.values('id', 'name', 'foodtype__id', 'foodtype__name', 'foodtype__color')
-    return render(request, 'eaten_add.html', {'form': form, 'meal_json': json.dumps(list(data))})
+    title = "Add Eaten Meal"
+    return render(request, 'eaten_add.html', {'form': form, 'title': title, 'meal_json': json.dumps(list(data))})
 
 @login_required
 def kse(request):
