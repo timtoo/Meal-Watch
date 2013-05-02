@@ -17,7 +17,14 @@
         </div>
 
         <div class="span4">
-          <h3>Most Popular Meals</h3> <span>[1 year]</span>
+          <div class="rowhead"><h3>Most Popular Meals</h3> <div class="dropdown h3sub">[<a id="popular-period" class="dropdown-toggle" data-toggle="dropdown" >1 year</a>]
+         <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a tabindex="-1" href="#" onclick="trnotify('Not implemented yet!'); return false">3 Months</a></li>
+            <li><a tabindex="-1" href="#" onclick="trnotify('Not implemented yet!'); return false">6 Months</a></li>
+            <li><a tabindex="-1" href="#" onclick="trnotify('Not implemented yet!'); return false">1 Year</a></li>
+            <li><a tabindex="-1" href="#" onclick="trnotify('Not implemented yet!'); return false">All Time</a></li>
+         </ul>
+          </div></div>
           <table class="table table-striped table-nolines">
           <tbody>
           {% for meal in popular %}
@@ -32,7 +39,12 @@
         </div>
 
         <div class="span4">
-          <div class="rowhead"><h3>It's been a while</h3> <span>[common]</span></div>
+          <div class="rowhead"><h3>It's been a while</h3> <div class="dropdown h3sub">[<a id="aging-period" class="dropdown-toggle" data-toggle="dropdown" >common</a>]
+         <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a tabindex="-1" href="#" onclick="trnotify('Not implemented yet!'); return false">Common Meals</a></li>
+            <li><a tabindex="-1" href="#" onclick="trnotify('Not implemented yet!'); return false">All Meals</a></li>
+         </ul>
+          </div></div>
           <table class="table table-striped table-nolines">
           <tbody>
           {% for meal in aging %}

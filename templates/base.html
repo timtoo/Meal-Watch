@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/static/dinner/bootstrap/css/bootstrap-responsive.css">
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/mint-choc/jquery-ui.css">
   <link rel="stylesheet" href="/static/dinner/jquery.qtip.min.css">
+  <link rel="stylesheet" href="/static/dinner/style.css">
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script src="https://www.google.com/jsapi"></script>
   <title>{% if title %}{{ title }} | {% endif %}What's for Dinner</title>
@@ -79,9 +80,11 @@
         font-weight: normal;
         display: inline-block;
     }
-    .span4 h3+span {
+    .span4 .h3sub {
+        position: relative;
+        display: inline-block;
         color: grey;
-        font-size: 70%;
+        font-size: 80%;
     }
 
     .circle {
@@ -204,6 +207,7 @@
     <script>document.write(' | <a href="mail' + 'to:');document.write('s' + '@');document.write('xxvii.net">Contact</a>');</script>
 
     </div>
+
 {% endblock footer %}
     </footer>
 
@@ -215,6 +219,7 @@
 <!-- script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script -->
 <!-- script src="/static/dinner/jquery.ui.menubar.js"></script -->
 <script src="/static/dinner/bootstrap/js/bootstrap.js"></script>
+<script src="/static/dinner/bootstrap-notify.js"></script>
 
 <script>
 $(document).ready(function() {
@@ -232,6 +237,11 @@ var enter_eaten = function() {
 <script>var image_search_terms="{% for w in random_names %}{{w}} {% endfor %}";</script>
 <script src="/static/dinner/googleimages.js"></script>
 {% endblock extrascripts %}
+<div class="notifications top-right"></div>
+<script>
+var trnotify = function(msg) { $('.top-right').notify({ message: { text: msg } }).show(); }
+</script>
+
 
 
 </body>
