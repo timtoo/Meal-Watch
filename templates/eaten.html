@@ -21,7 +21,7 @@
 {% for m in eaten %}
 <tr>
 <td>{{ m.date | date:"Y-m-d" }}</td>
-<td style="font-weight: 700; color:inherit"><a href="/dinner/{{user.id}}/meal/{{m.meal__id}}">{{ m.meal__name }}</a></td>
+<td style="font-weight: 700; color:inherit"><a href="/dinner/{{user.id}}/meal/{{m.meal_id}}">{{ m.meal__name }}</a></td>
 <td>{{ m.meal__foodtype__name }}<div class="circle" style="background-color: #{{m.meal__foodtype__color}}"></div></td>
 <td>{{ m.meal__rating | default_if_none:" " }}</td>
 <td style="text-align: right">{{ m.meal_count }}</td>
