@@ -3,9 +3,15 @@
 
 <script src="/static/dinner/dinner.js"></script>
 <script>
+$(document).ready(function() {
     f = document.getElementById('id_date');
     if (! f.value) {
         f.value = today();
     }
+
+    $('#button-id-delete').click(function() {
+            confirm("Really delete?");
+            });
+});
 </script>
 

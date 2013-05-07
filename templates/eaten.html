@@ -20,7 +20,7 @@
 <tbody>
 {% for m in eaten %}
 <tr>
-<td>{{ m.date | date:"Y-m-d" }}</td>
+<td><a href="/dinner/{{user.id}}/eaten/{{m.id}}" style="color: inherit">{{ m.date | date:"Y-m-d" }}</a></td>
 <td style="font-weight: 700; color:inherit"><a href="/dinner/{{user.id}}/meal/{{m.meal_id}}">{{ m.meal__name }}</a></td>
 <td>{{ m.meal__foodtype__name }}<div class="circle" style="background-color: #{{m.meal__foodtype__color}}"></div></td>
 <td>{{ m.meal__rating | default_if_none:" " }}</td>
@@ -52,3 +52,21 @@ $(document).ready(function() {
 </script>
 
 {% endblock %}
+
+opendoc reader
+appbrain
+dropbox
+moon reader
+google maps
+gmail
+Sudoku Free
+opera mini
+colordict
+google talk
+robotic guitarist
+adblock plus
+virtualrecorder
+wifi analyser
+ultimate backup (pro?)
+fdroid
+
