@@ -2,6 +2,13 @@ from django.db import models
 
 
 class EatenManager(models.Manager):
+    def owned(self, id, userid):
+        """Similar to .get(id=?) but requires userid to filter"""
+        result = self.model.objects.filter(meal__owner=userid, id=id)
+        if not result:
+            raise self.model.DoesNotExist, "Eaten %s owned by %s" % (id, userid)
+        return result[0]
+
     def eaten_count(self, meal=None):
         "Count of how many times each meal has been eaten"
         result = self.model.objects.values('meal').order_by().annotate(models.Count('meal'))

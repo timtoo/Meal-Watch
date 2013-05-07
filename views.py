@@ -57,11 +57,11 @@ def overview(request, userid):
     context['form'] = EatenForm()
     return render(request, 'dinner.html', context)
 
-def meal_tip(request):
+def meal_tip(request, userid):
     html = []
     mealid = request.GET.get('id', '').rsplit('-',1)[-1]
     if mealid:
-        meal = models.Meal.objects.get(id=mealid)
+        meal = models.Meal.objects.get(id=mealid, owner=userid)
 
         if meal.foodtype.color:
             html.append('<div><div class="circle" style="background-color: #%s"></div> %s (food type)</div>' % (meal.foodtype.color, meal.foodtype.name))
@@ -127,19 +127,28 @@ def foodtypes(request, userid):
     return render(request, 'food_types.html', { 'food': food })
 
 @login_required(login_url=LOGIN_URL)
-def add_eaten(request, userid):
+def eaten_add(request, userid, eatenid=None):
     """Validate insert/update eaten record"""
+    action = 'new'
     if request.method == 'POST':
         form = EatenForm(request.POST)
         print form.is_valid()
         if form.is_valid():
             meal = form.save()
             return HttpResponseRedirect('/dinner/%s/?added=%s-%s' % (request.user.id, meal.id, meal.meal.id))
+    elif eatenid:
+        eaten = models.Eaten.objects.owned(eatenid, request.user.id)
+        action = eatenid
+        if eaten:
+            form = EatenForm(instance=eaten)
+        else:
+            return HttpResponseRedirect('/dinner/%s/?error=%s' % (request.user.id, "No such eaten meal"))
     else:
         form = EatenForm()
 
     data = models.Meal.objects.values('id', 'name', 'foodtype__id', 'foodtype__name', 'foodtype__color')
     title = "Add Eaten Meal"
+    form.helper.form_action = '/dinner/%s/eaten/%s' % (request.user.id, action)
     return render(request, 'eaten_add.html', {'form': form, 'title': title, 'meal_json': json.dumps(list(data))})
 
 @login_required
@@ -166,7 +175,7 @@ class EatenForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.form_class='form-horizontal'
-        self.helper.form_action='add_eaten'
+        self.helper.form_action=''
         self.helper.add_input(layout.Submit('submit', 'Submit'))
         self.helper.layout = layout.Layout(
             layout.Div(bootstrap.AppendedText('date', '<i class="icon-calendar"></i>')),
