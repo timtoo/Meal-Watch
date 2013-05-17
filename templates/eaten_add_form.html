@@ -10,7 +10,20 @@ $(document).ready(function() {
     }
 
     $('#button-id-delete').click(function() {
-            confirm("Really delete?");
+            if (confirm("Really delete?")) {
+                form = document.getElementById('eaten-edit-form');
+                var hidden = document.createElement('input');
+                hidden.type = 'hidden';
+                hidden.name = 'delete-confirmed';
+                hidden.value = '1'
+
+            } else {
+                return false;
+            }
+            });
+    $('#button-id-cancel').click(function() {
+            if (confirm("Really cancel?")) { window.history.back(); return true }
+            else { return false; }
             });
 });
 </script>

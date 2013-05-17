@@ -147,6 +147,10 @@ def eaten_add(request, userid, eatenid=None):
     else:
         form = EatenForm(instance=instance)
 
+    # delete button if editing
+    if eatenid:
+        form.helper.layout.fields[-1].fields.append(form.extraButton('delete', 'delete', 'color: red'))
+
     data = models.Meal.objects.values('id', 'name', 'foodtype__id', 'foodtype__name', 'foodtype__color')
     title = "Add Eaten Meal"
     form.helper.form_action = '/dinner/%s/eaten/%s' % (request.user.id, action)
@@ -175,6 +179,7 @@ class EatenForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
+        self.helper.form_id = 'eaten-edit-form'
         self.helper.form_class='form-horizontal'
         self.helper.form_action=''
         #self.helper.add_input(layout.Submit('submit', 'Submit'))
@@ -182,11 +187,18 @@ class EatenForm(ModelForm):
             layout.Div(bootstrap.AppendedText('date', '<i class="icon-calendar"></i>')),
             'meal',
             'notes',
-            layout.ButtonHolder(layout.Submit('submit', 'Submit', css_class="controls"), layout.Reset('reset', 'Reset'), layout.HTML(' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '), layout.Button('delete', 'Delete', css_class="btn-warning")),
+            layout.ButtonHolder(layout.Submit('submit', 'Submit', css_class="controls"),
+                    self.extraButton('cancel', 'cancel'))
 
-)
+        )
 
         super(EatenForm, self).__init__(*args, **kwargs)
+
+    def extraButton(self, idstr, label, style=None):
+        template = ' &nbsp;&nbsp;&nbsp; <a href="#" id="button-id-%s" style="vertical-align: middle; margin-left: 2em">%s</a>'
+        if style:
+            template = template.replace('style="', 'style="%s; ' % style)
+        return layout.HTML(template % (idstr, label))
 
 
 
