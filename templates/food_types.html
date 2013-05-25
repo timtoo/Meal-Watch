@@ -19,8 +19,8 @@
 <tbody>
 {% for f in food %}
 <tr>
-<td style="font-weight: 700; color:inherit"><a href="/dinner/{{user.id}}/meals/{{f.id}}">{{ f.name }}</a></td>
-<td>{{f.meal__count}}</td>
+<td style="font-weight: 700; color:inherit"><a href="/dinner/{{user.id}}/foodtype/{{f.id}}/edit">{{ f.name }}</a></td>
+<td><a href="/dinner/{{user.id}}/meals/{{f.id}}">{{f.meal__count}}</a></td>
 <td><div class="circle" style="background-color: #{{f.color}}"></div>{{f.color}}</td>
 <td>{{ f.created | date:"Y-m-d" }}</td>
 </tr>

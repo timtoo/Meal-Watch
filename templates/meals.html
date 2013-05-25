@@ -23,12 +23,12 @@
 <tbody>
 {% for m in meals %}
 <tr>
-<td style="font-weight: 700; color:inherit"><a href="/dinner/{{user.id}}/meal/{{m.id}}">{{ m.name }}</a></td>
+<td style="font-weight: 700; color:inherit"><a href="/dinner/{{user.id}}/meal/{{m.id}}/edit">{{ m.name }}</a></td>
 <td>{{ m.foodtype.name }}<div class="circle" style="background-color: #{{m.foodtype.color}}"></div></td>
 <td style="text-align: center; color: {% if m.common %}green{%else%}darkred{%endif%}">{% if m.common %}&#x2714;{% else %}&#x2717;{% endif %}</td>
 <td style="text-align: center; color: {% if m.freezable %}green{%else%}darkred{%endif%}">{% if m.freezable %}&#x2714;{% else %}&#x2717;{% endif %}</td>
 <td>{{ m.rating | default_if_none:" " }}</td>
-<td style="text-align: right">{{m.eaten__count}}</td>
+<td style="text-align: right"><a href="/dinner/{{user.id}}/meal/{{m.id}}">{{m.eaten__count}}</a></td>
 <td>{{ m.last_eaten | default_if_none:" "  | date:"Y-m-d" }}</td>
 <td>{{ m.created | date:"Y-m-d" }}</td>
 </tr>

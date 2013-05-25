@@ -169,6 +169,19 @@ def auth4tim4testing(request):
     return overview_redirect(request)
 
 
+@login_required
+def recycle(self, userid):
+    pass
+
+@login_required
+def foodtypes_edit(self, userid, foodtypeid):
+    pass
+
+@login_required
+def meal_edit(self, userid, mealid):
+    pass
+
+
 class EatenForm(ModelForm):
 
     class Meta:

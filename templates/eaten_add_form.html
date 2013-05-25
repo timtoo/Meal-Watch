@@ -16,13 +16,14 @@ $(document).ready(function() {
                 hidden.type = 'hidden';
                 hidden.name = 'delete-confirmed';
                 hidden.value = '1'
-
+                form.appendChild(hidden);
+                //form.submit()
             } else {
                 return false;
             }
             });
     $('#button-id-cancel').click(function() {
-            if (confirm("Really cancel?")) { window.history.back(); return true }
+            if (confirm("Really cancel, and go back to previous page?")) { window.history.back(); return true }
             else { return false; }
             });
 });
