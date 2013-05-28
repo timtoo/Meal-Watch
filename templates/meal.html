@@ -45,7 +45,7 @@
 <tbody>
 {% for m in eaten %}
 <tr>
-<td style="vertical-align: top"><a href="../eaten/{{m.id}}">{{ m.date | default_if_none:" "  | date:"Y-m-d" }}</a></td>
+<td style="vertical-align: top"><a href="../eaten/{{m.id}}/edit">{{ m.date | default_if_none:" "  | date:"Y-m-d" }}</a></td>
 <td style="vertical-align: top; width: 90%">{{ m.notes }}</td>
 </tr>
 {% endfor %}

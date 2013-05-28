@@ -153,7 +153,7 @@ def eaten_add(request, userid, eatenid=None):
 
     data = models.Meal.objects.values('id', 'name', 'foodtype__id', 'foodtype__name', 'foodtype__color')
     title = "Add Eaten Meal"
-    form.helper.form_action = '/dinner/%s/eaten/%s' % (request.user.id, action)
+    form.helper.form_action = '/dinner/%s/eaten/%s/edit' % (request.user.id, action)
     return render(request, 'eaten_add.html', {'form': form, 'title': title, 'meal_json': json.dumps(list(data)), 'eaten': instance})
 
 @login_required
