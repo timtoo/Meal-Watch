@@ -127,23 +127,30 @@ def foodtypes(request, userid):
     return render(request, 'food_types.html', { 'food': food })
 
 @login_required(login_url=LOGIN_URL)
-def eaten_add(request, userid, eatenid=None):
+def eaten_edit(request, userid, eatenid=None):
     """Validate insert/update eaten record"""
     action = 'new'
     instance = None
 
     if eatenid:
         action = eatenid
+
+        # verify ownership of record
         try:
             instance = models.Eaten.objects.owned(eatenid, request.user.id)
         except models.Eaten.DoesNotExist:
             return HttpResponseRedirect('/dinner/%s/?error=%s' % (request.user.id, "No such eaten meal"))
 
     if request.method == 'POST':
-        form = EatenForm(request.POST, instance=instance)
-        if form.is_valid():
-            meal = form.save()
-            return HttpResponseRedirect('/dinner/%s/?added=%s-%s' % (request.user.id, meal.id, meal.meal.id))
+        if request.POST.get('remove') == '1':
+            url = '/dinner/%s/?deleted=%s-%s' % (request.user.id, instance.id, instance.meal.id)
+            instance.delete()
+            return HttpResponseRedirect(url)
+        else:
+            form = EatenForm(request.POST, instance=instance)
+            if form.is_valid():
+                meal = form.save()
+                return HttpResponseRedirect('/dinner/%s/?added=%s-%s' % (request.user.id, meal.id, meal.meal.id))
     else:
         form = EatenForm(instance=instance)
 
@@ -156,28 +163,20 @@ def eaten_add(request, userid, eatenid=None):
     form.helper.form_action = '/dinner/%s/eaten/%s/edit' % (request.user.id, action)
     return render(request, 'eaten_add.html', {'form': form, 'title': title, 'meal_json': json.dumps(list(data)), 'eaten': instance})
 
-@login_required
+@login_required(login_url=LOGIN_URL)
 def kse(request):
     """for testing"""
     return render(request, '_kse.html')
 
-def auth4tim4testing(request):
-    """instant authenticate as user #1 for testing"""
-    u = User.objects.get(id=1)
-    u.backend = 'django.contrib.auth.backends.ModelBackend'
-    login(request, u)
-    return overview_redirect(request)
-
-
-@login_required
+@login_required(login_url=LOGIN_URL)
 def recycle(self, userid):
     pass
 
-@login_required
+@login_required(login_url=LOGIN_URL)
 def foodtypes_edit(self, userid, foodtypeid):
     pass
 
-@login_required
+@login_required(login_url=LOGIN_URL)
 def meal_edit(self, userid, mealid):
     pass
 
@@ -200,9 +199,8 @@ class EatenForm(ModelForm):
             layout.Div(bootstrap.AppendedText('date', '<i class="icon-calendar"></i>')),
             'meal',
             'notes',
-            layout.ButtonHolder(layout.Submit('submit', 'Submit', css_class="controls"),
-                    self.extraButton('cancel', 'cancel'))
-
+            layout.ButtonHolder(layout.Submit('submit_', 'Submit', css_class="controls"),
+                    self.extraButton('cancel_', 'cancel'))
         )
 
         super(EatenForm, self).__init__(*args, **kwargs)
@@ -213,6 +211,14 @@ class EatenForm(ModelForm):
             template = template.replace('style="', 'style="%s; ' % style)
         return layout.HTML(template % (idstr, label))
 
+
+# XXX probably should disable this for production...
+def auth4tim4testing(request):
+    """instant authenticate as user #1 for testing"""
+    u = User.objects.get(id=1)
+    u.backend = 'django.contrib.auth.backends.ModelBackend'
+    login(request, u)
+    return overview_redirect(request)
 
 
 

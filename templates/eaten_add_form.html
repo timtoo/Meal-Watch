@@ -14,10 +14,10 @@ $(document).ready(function() {
                 form = document.getElementById('eaten-edit-form');
                 var hidden = document.createElement('input');
                 hidden.type = 'hidden';
-                hidden.name = 'delete-confirmed';
+                hidden.name = 'remove';
                 hidden.value = '1'
                 form.appendChild(hidden);
-                //form.submit()
+                form.submit();
             } else {
                 return false;
             }
