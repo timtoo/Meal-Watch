@@ -143,14 +143,14 @@ def eaten_edit(request, userid, eatenid=None):
 
     if request.method == 'POST':
         if request.POST.get('remove') == '1':
-            url = '/dinner/%s/?deleted=%s-%s' % (request.user.id, instance.id, instance.meal.id)
+            url = '/dinner/%s/meal/%s?deleted=%s-%s' % (request.user.id, instance.meal.id, instance.id, instance.meal.id)
             instance.delete()
             return HttpResponseRedirect(url)
         else:
             form = EatenForm(request.POST, instance=instance)
             if form.is_valid():
                 meal = form.save()
-                return HttpResponseRedirect('/dinner/%s/?added=%s-%s' % (request.user.id, meal.id, meal.meal.id))
+                return HttpResponseRedirect('/dinner/%s/meal/%s?added=%s-%s' % (request.user.id, meal.meal.id, meal.id, meal.meal.id))
     else:
         form = EatenForm(instance=instance)
 
