@@ -145,10 +145,22 @@ var enter_eaten = function() {
 {% endblock extrascripts %}
 <div class="notifications top-right"></div>
 <script>
-var trnotify = function(msg) { $('.top-right').notify({ message: { text: msg } }).show(); }
+var trinfo = function(msg) { $('.top-right').notify({ message: { text: msg }, fadeOut: { enabled: true, delay: 5000 } }).show(); }
+var trwarning = function(msg) { $('.top-right').notify({ message: { text: msg}, type: 'warning', fadeOut: { enabled: true, delay: 10000 } }).show(); }
+var trerror = function(msg) { $('.top-right').notify({ message: { text: msg }, type: 'important', fadeOut: { enabled: false } }).show(); }
+
+$(document).ready(function() {
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'warning' %}trwarning('{{message}}');
+        {% elif message.tags == 'error' %}trerror('{{message}}');
+        {% else %}trinfo('{{message}}');
+        {% endif %}
+    {% endfor %}
+{% endif %}
+});
+
 </script>
-
-
 
 </body>
 </html>
