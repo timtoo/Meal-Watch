@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block header %}
-<link rel="stylesheet" type="text/css" href="/static/dinner/datepicker.css">
 <link rel="stylesheet" type="text/css" href="/static/dinner/select2/select2.css">
 {% endblock header %}
 
@@ -11,19 +10,18 @@
 
 {% block content %}
 
-{% include 'eaten_add_form.html' %}
+{% load crispy_forms_tags %}
+{% crispy form form.helper 'bootstrap' %}
 
 {% endblock content %}
 
 {% block extrascripts %}
 <script src="/static/dinner/select2/select2.js"></script>
 <script src="/static/dinner/expanding.js"></script>
-<script src="/static/dinner/bootstrap-datepicker.js"></script>
 <script>
-var select_data = {{ meal_json|safe }};
+var select_data = {{ footype_json|safe }};
 
 $(document).ready(function() {
-    $('.dateinput').datepicker({ format: "yyyy-mm-dd", autoclose: true });
 
     var format = function (item) { if (item.id) return item.name + ' <div class="circle" style="background-color: #' + item.foodtype__color + '"></div><span color="grey">(' + item.foodtype__name + ')</span>'; };
 

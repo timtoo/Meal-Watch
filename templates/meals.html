@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block bluebar %}
-<h2>Meals: {% if foodtype %}({{foodtype.name}} only <a href="/dinner/{{request.user.id}}/meals" style="color:darkred; font-size:80%">&#x2717;</a>){% endif %}</h2>
+<h2>Meal records: {% if foodtype %}({{foodtype.name}} only <a href="/dinner/{{request.user.id}}/meals" style="color:darkred; font-size:80%">&#x2717;</a>){% endif %}</h2>
 {% endblock %}
 {% block content %}
 <table class="table table-striped table-xnolines">

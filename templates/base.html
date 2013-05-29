@@ -29,17 +29,26 @@
           {% if user.is_authenticated %}
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#" tmp="/dinner/{{user.id}}">{{ user.username }}'s Meals <b class="caret"></b></a>
-              <ul class="dropdown-menu">
+              <ul class="dropdown-menu" role="menu">
                   <li><a href="/dinner/{{ user.id }}/">Home</a></li>
                   <li><a href="/dinner/{{ user.id }}/eaten/new" xonclick="enter_eaten()">Eat Meal</a></li>
                   <li><a href="/dinner/{{ user.id }}/eaten">Eaten Meals</a></li>
-                 <li><a href="/dinner/{{ user.id }}/meals">All Meals</a></li>
+                  <li><a href="/dinner/{{ user.id }}/meals">All Meals</a></li>
                   <li><a href="/dinner/{{ user.id }}/foodtypes">Food Types</a></li>
+                  <li role="presentation" class="divider"></li>
+                  <li class="dropdown-submenu"><a tabindex="-1" href="#">Create</a>
+                    <ul class="dropdown-menu" style="left: -95%">
+                        <li><a href="/dinner/{{ user.id }}/meal/new">New Meal Record</a></li>
+                        <li><a href="/dinner/{{ user.id }}/foodtype/new">New Food Type</a></li>
+                    </ul>
+                  </li>
+
+
               </ul>
           </li>
           <li><a href="/dinner/logout">Logout</a></li>
           {% else %}
-          <li><a href="/dinner/login">Login</a></li>
+          <li><a href="/dinner/login">Login</a></li
           {% endif %}
         </ul>
       </nav>

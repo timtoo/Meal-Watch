@@ -4,14 +4,12 @@
 {% endblock %}
 
 {% block bluebar %}
-<h2>Meal: {{ meal.name }}</h2>
+<div style="float: right"><a class="btn" href="/dinner/{{user.id}}/meal/{{meal.id}}/edit">Edit</a></div>
+<h2>{{ title }}</h2>
 {% endblock %}
 
 {% block content %}
 
-<div style="float: right">
-<a href="#">Edit</a> | <a href="#">Delete</a>
-</div>
 <table>
 <tr>
 <td>Food type:</td><td><div class="circle" style="background-color: #{{meal.foodtype.color}}"></div>{{ meal.foodtype.name|capfirst }}</td>

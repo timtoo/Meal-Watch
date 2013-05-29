@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
-from django.forms import ModelForm, Form, TextInput, Textarea
+from django.forms import ModelForm, Form, TextInput, Textarea, HiddenInput
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -54,7 +54,6 @@ def overview(request, userid):
             ).order_by('last_eaten', '-rating', 'name')[:max_rows]
     context['random_names'] = [ "%s %s" % (x['name'], x['foodtype__name']) for x in context['random'] ]
     context['random_names'].insert(0, 'recipe')
-    context['form'] = EatenForm()
     return render(request, 'dinner.html', context)
 
 def meal_tip(request, userid):
@@ -129,11 +128,9 @@ def foodtypes(request, userid):
 @login_required(login_url=LOGIN_URL)
 def eaten_edit(request, userid, eatenid=None):
     """Validate insert/update eaten record"""
-    action = 'new'
     instance = None
 
     if eatenid:
-        action = eatenid
 
         # verify ownership of record
         try:
@@ -156,12 +153,63 @@ def eaten_edit(request, userid, eatenid=None):
 
     # delete button if editing
     if eatenid:
-        form.helper.layout.fields[-1].fields.append(form.extraButton('delete', 'delete', 'color: red'))
+        form.helper.layout.fields[-1].fields.append(extraButton('delete', 'delete', 'color: red'))
+        form.helper.form_action = '/dinner/%s/eaten/%s/edit' % (request.user.id, instance.id)
+        title = "Modify an eaten meal"
+    else:
+        form.helper.form_action = '/dinner/%s/eaten/new' % (request.user.id,)
+        title = "Record an eaten meal"
 
     data = models.Meal.objects.values('id', 'name', 'foodtype__id', 'foodtype__name', 'foodtype__color')
-    title = "Add Eaten Meal"
-    form.helper.form_action = '/dinner/%s/eaten/%s/edit' % (request.user.id, action)
+
     return render(request, 'eaten_add.html', {'form': form, 'title': title, 'meal_json': json.dumps(list(data)), 'eaten': instance})
+
+@login_required(login_url=LOGIN_URL)
+def meal_edit(request, userid, pid=None):
+    """Validate insert/update eaten record"""
+    instance = None
+
+    if pid:
+        # verify ownership of record
+        try:
+            instance = models.Meal.objects.get(owner=request.user.id, id=pid)
+        except models.Eaten.DoesNotExist:
+            return HttpResponseRedirect('/dinner/%s/?error=%s' % (request.user.id, "No such meal"))
+
+    if request.method == 'POST':
+        if request.POST.get('remove') == '1':
+            url = '/dinner/%s/meals?deleted=%s' % (request.user.id, instance.id)
+            instance.delete()
+            return HttpResponseRedirect(url)
+        else:
+            data = request.POST.copy()
+            if instance:
+                # don't allow changing owner
+                data['owner'] = instance.owner.id
+            else:
+                # force owner to current user
+                data['owner'] = request.user.id
+
+            form = MealForm(data, instance=instance)
+
+            print form.errors
+            if form.is_valid():
+                meal = form.save()
+                return HttpResponseRedirect('/dinner/%s/meal/%s?updated=%s' % (request.user.id, meal.id, meal.id))
+    else:
+        form = MealForm(instance=instance)
+
+    # delete button if editing
+    if pid:
+        form.helper.form_action = '/dinner/%s/meal/%s/edit' % (request.user.id, instance.id)
+        form.helper.layout.fields[-1].fields.append(extraButton('delete', 'delete', 'color: red'))
+        title = 'Modify a meal record'
+    else:
+        form.helper.form_action = '/dinner/%s/meal/new' % (request.user.id,)
+        title = "Create a meal record"
+
+    data = models.FoodType.objects.values('id', 'name', 'color')
+    return render(request, 'meal_edit.html', {'form': form, 'title': title, 'foodtype_json': json.dumps(list(data)), 'meal': instance})
 
 @login_required(login_url=LOGIN_URL)
 def kse(request):
@@ -176,15 +224,18 @@ def recycle(self, userid):
 def foodtypes_edit(self, userid, foodtypeid):
     pass
 
-@login_required(login_url=LOGIN_URL)
-def meal_edit(self, userid, mealid):
-    pass
 
+def extraButton(idstr, label, style=None):
+    template = ' &nbsp;&nbsp;&nbsp; <a href="#" id="button-id-%s" style="vertical-align: middle; margin-left: 2em">%s</a>'
+    if style:
+        template = template.replace('style="', 'style="%s; ' % style)
+    return layout.HTML(template % (idstr, label))
 
 class EatenForm(ModelForm):
 
     class Meta:
         model = models.Eaten
+        fields = [ 'meal', 'notes', 'date' ]
         widgets = { 'meal': TextInput(attrs={'max_length': 120, 'style': 'width: 20em'}),
                     'notes': Textarea(attrs={'rows': 1, 'style': 'width: 22em', 'cols': 40})
                     }
@@ -200,16 +251,38 @@ class EatenForm(ModelForm):
             'meal',
             'notes',
             layout.ButtonHolder(layout.Submit('submit_', 'Submit', css_class="controls"),
-                    self.extraButton('cancel_', 'cancel'))
+                    extraButton('cancel_', 'cancel'))
         )
 
         super(EatenForm, self).__init__(*args, **kwargs)
 
-    def extraButton(self, idstr, label, style=None):
-        template = ' &nbsp;&nbsp;&nbsp; <a href="#" id="button-id-%s" style="vertical-align: middle; margin-left: 2em">%s</a>'
-        if style:
-            template = template.replace('style="', 'style="%s; ' % style)
-        return layout.HTML(template % (idstr, label))
+class MealForm(ModelForm):
+
+    class Meta:
+        model = models.Meal
+        fields = [ 'name', 'foodtype', 'notes', 'prep_mins', 'common', 'freezable', 'rating', 'owner']
+        widgets = { 'notes': Textarea(attrs={'rows': 1, 'style': 'width: 22em', 'cols': 40}),
+                    'owner': HiddenInput() }
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_id = 'meal-edit-form'
+        self.helper.form_class='form-horizontal'
+        self.helper.form_action=''
+        self.helper.layout = layout.Layout(
+            'name',
+            'foodtype',
+            'notes',
+            'prep_mins',
+            'common',
+            'freezable',
+            'rating',
+            layout.ButtonHolder(layout.Submit('submit_', 'Submit', css_class="controls"),
+                    extraButton('cancel_', 'cancel'))
+        )
+
+        super(MealForm, self).__init__(*args, **kwargs)
+
 
 
 # XXX probably should disable this for production...
