@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.forms import ModelForm, Form, TextInput, Textarea, HiddenInput
+from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -108,7 +109,13 @@ def meals(request, userid, foodtype=None):
 @login_required(login_url=LOGIN_URL)
 def meal(request, userid, mealid):
     """Display info on a single meal"""
-    meal = models.Meal.objects.get(id=mealid)
+    try:
+        meal = models.Meal.objects.get(id=mealid, owner=request.user.id)
+    except models.Meal.DoesNotExist:
+        messages.add_message(request, messages.ERROR, "Meal %s does not exist for user %s." % (mealid, userid))
+        return HttpResponseRedirect('/dinner/%s/' % (request.user.id,))
+
+
     eaten = models.Eaten.objects.filter(meal__id = mealid).order_by('-date','-id')
     attribs = []
     if meal.common:
@@ -136,18 +143,21 @@ def eaten_edit(request, userid, eatenid=None):
         try:
             instance = models.Eaten.objects.owned(eatenid, request.user.id)
         except models.Eaten.DoesNotExist:
-            return HttpResponseRedirect('/dinner/%s/?error=%s' % (request.user.id, "No such eaten meal"))
+            messages.add_message(request, messages.ERROR, 'No such eaten meal: %s' % eatenid)
+            return HttpResponseRedirect('/dinner/%s/' % (request.user.id,))
 
     if request.method == 'POST':
         if request.POST.get('remove') == '1':
-            url = '/dinner/%s/meal/%s?deleted=%s-%s' % (request.user.id, instance.meal.id, instance.id, instance.meal.id)
+            messages.add_message(request, messages.WARNING, 'Deleted eaten meal %s: %s' % (instance.id, instance.meal.name))
+            url = '/dinner/%s/meal/%s' % (request.user.id, instance.meal.id,)
             instance.delete()
             return HttpResponseRedirect(url)
         else:
             form = EatenForm(request.POST, instance=instance)
             if form.is_valid():
                 meal = form.save()
-                return HttpResponseRedirect('/dinner/%s/meal/%s?added=%s-%s' % (request.user.id, meal.meal.id, meal.id, meal.meal.id))
+                messages.add_message(request, messages.INFO, 'Updated eaten meal %s: %s' % (meal.id, meal.meal.name))
+                return HttpResponseRedirect('/dinner/%s/meal/%s' % (request.user.id, meal.meal.id,))
     else:
         form = EatenForm(instance=instance)
 
@@ -174,11 +184,13 @@ def meal_edit(request, userid, pid=None):
         try:
             instance = models.Meal.objects.get(owner=request.user.id, id=pid)
         except models.Eaten.DoesNotExist:
-            return HttpResponseRedirect('/dinner/%s/?error=%s' % (request.user.id, "No such meal"))
+            messages.add_message(request, messages.ERROR, 'No such meal: %s' % pid)
+            return HttpResponseRedirect('/dinner/%s/' % (request.user.id,))
 
     if request.method == 'POST':
         if request.POST.get('remove') == '1':
-            url = '/dinner/%s/meals?deleted=%s' % (request.user.id, instance.id)
+            messages.add_message(request, messages.WARNING, 'Deleted meal %s: %s' % (pid, instance.name))
+            url = '/dinner/%s/meals' % (request.user.id, instance.id)
             instance.delete()
             return HttpResponseRedirect(url)
         else:
@@ -192,9 +204,9 @@ def meal_edit(request, userid, pid=None):
 
             form = MealForm(data, instance=instance)
 
-            print form.errors
             if form.is_valid():
                 meal = form.save()
+                messages.add_message(request, messages.INFO, 'Updated meal %s: %s' % (pid, meal.name))
                 return HttpResponseRedirect('/dinner/%s/meal/%s?updated=%s' % (request.user.id, meal.id, meal.id))
     else:
         form = MealForm(instance=instance)

@@ -19,9 +19,27 @@
 <script src="/static/dinner/select2/select2.js"></script>
 <script src="/static/dinner/expanding.js"></script>
 <script>
-var select_data = {{ footype_json|safe }};
+var select_data = {{ foodtype_json|safe }};
 
 $(document).ready(function() {
+    $('#button-id-cancel').click(function() {
+            if (confirm("Really cancel, and go back to previous page?")) { window.history.back(); return true }
+            else { return false; }
+            });
+
+    $('#button-id-delete').click(function() {
+            if (confirm("Really delete (and any attached eaten meals)?")) {
+                form = document.getElementById('meal-edit-form');
+                var hidden = document.createElement('input');
+                hidden.type = 'hidden';
+                hidden.name = 'remove';
+                hidden.value = '1'
+                form.appendChild(hidden);
+                form.submit();
+            } else {
+                return false;
+            }
+            });
 
     var format = function (item) { if (item.id) return item.name + ' <div class="circle" style="background-color: #' + item.foodtype__color + '"></div><span color="grey">(' + item.foodtype__name + ')</span>'; };
 
