@@ -221,20 +221,71 @@ def meal_edit(request, userid, pid=None):
         title = "Create a meal record"
 
     data = models.FoodType.objects.values('id', 'name', 'color')
-    return render(request, 'meal_edit.html', {'form': form, 'title': title, 'foodtype_json': json.dumps(list(data)), 'meal': instance})
+    return render(request, 'meal_edit.html', {
+            'form': form, 'title': title,
+            'select_json': json.dumps(list(data)),
+            'instance': instance,
+            'confirm_remove': 'Really remove (and any attached eaten meals)?',
+            })
+
+@login_required(login_url=LOGIN_URL)
+def foodtype_edit(request, userid, pid=None):
+    """Validate insert/update eaten record"""
+    instance = None
+
+    if pid:
+        # verify ownership of record
+        try:
+            instance = models.FoodType.objects.get(owner=request.user.id, id=pid)
+        except models.Eaten.DoesNotExist:
+            messages.add_message(request, messages.ERROR, 'No such food type: %s' % pid)
+            return HttpResponseRedirect('/dinner/%s/foodtypes' % (request.user.id,))
+
+    if request.method == 'POST':
+        if request.POST.get('remove') == '1':
+            messages.add_message(request, messages.WARNING, 'Deleted food type %s: %s' % (pid, instance.name))
+            url = '/dinner/%s/foodtypes' % (request.user.id,)
+            instance.delete()
+            return HttpResponseRedirect(url)
+        else:
+            data = request.POST.copy()
+            if instance:
+                # don't allow changing owner
+                data['owner'] = instance.owner.id
+            else:
+                # force owner to current user
+                data['owner'] = request.user.id
+
+            form = FoodTypeForm(data, instance=instance)
+
+            if form.is_valid():
+                record = form.save()
+                messages.add_message(request, messages.INFO, 'Updated food type %s: %s' % (pid, record.name))
+                return HttpResponseRedirect('/dinner/%s/foodtypes' % (request.user.id,))
+    else:
+        form = FoodTypeForm(instance=instance)
+
+    # delete button if editing
+    if pid:
+        form.helper.form_action = '/dinner/%s/foodtype/%s/edit' % (request.user.id, instance.id)
+        form.helper.layout.fields[-1].fields.append(extraButton('delete', 'delete', 'color: red'))
+        title = 'Modify a food type record'
+    else:
+        form.helper.form_action = '/dinner/%s/foodtype/new' % (request.user.id,)
+        title = "Create a food type record"
+
+    data = []
+    return render(request, 'meal_edit.html', {
+            'form': form, 'title': title,
+            'select_json': json.dumps(list(data)),
+            'instance': instance,
+            'confirm_remove': 'Really remove (AND ALL ATTACHED MEALS)?',
+            })
 
 @login_required(login_url=LOGIN_URL)
 def kse(request):
     """for testing"""
     return render(request, '_kse.html')
-
-@login_required(login_url=LOGIN_URL)
-def recycle(self, userid):
-    pass
-
-@login_required(login_url=LOGIN_URL)
-def foodtypes_edit(self, userid, foodtypeid):
-    pass
 
 
 def extraButton(idstr, label, style=None):
@@ -294,6 +345,27 @@ class MealForm(ModelForm):
         )
 
         super(MealForm, self).__init__(*args, **kwargs)
+
+class FoodTypeForm(ModelForm):
+
+    class Meta:
+        model = models.FoodType
+        fields = [ 'name', 'color', 'owner']
+        widgets = { 'owner': HiddenInput() }
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_id = 'foodtype-edit-form'
+        self.helper.form_class='form-horizontal'
+        self.helper.form_action=''
+        self.helper.layout = layout.Layout(
+            'name',
+            'color',
+            layout.ButtonHolder(layout.Submit('submit_', 'Submit', css_class="controls"),
+                    extraButton('cancel_', 'cancel'))
+        )
+
+        super(FoodTypeForm, self).__init__(*args, **kwargs)
 
 
 

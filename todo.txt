@@ -14,4 +14,8 @@
 - pictures/icons for meals?
 - colour code food types?
 
+- if meal has attached eaten instance do not allow delete.
+    - later I'd like to display a summary of eaten meals before allowing
+      delete
+
 

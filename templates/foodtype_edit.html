@@ -19,21 +19,17 @@
 <script src="/static/dinner/select2/select2.js"></script>
 <script src="/static/dinner/expanding.js"></script>
 <script>
-var select_data = {{ select_json|safe }};
-</script>
-{% endblock %}
+var select_data = {{ foodtype_json|safe }};
 
-
-<script>
-{%block readyscript %}
-    $('#button-id-cancel_').click(function() {
+$(document).ready(function() {
+    $('#button-id-cancel').click(function() {
             if (confirm("Really cancel, and go back to previous page?")) { window.history.back(); return true }
             else { return false; }
             });
 
     $('#button-id-delete').click(function() {
-            if (confirm("{{confirm_remove}}")) {
-                form = document.getElementById('{{form.helper.form_id}}');
+            if (confirm("Really delete (and any attached eaten meals)?")) {
+                form = document.getElementById('meal-edit-form');
                 var hidden = document.createElement('input');
                 hidden.type = 'hidden';
                 hidden.name = 'remove';
@@ -45,8 +41,6 @@ var select_data = {{ select_json|safe }};
             }
             });
 
-    {% if form.helper.form_id == 'eaten-edit-form' %}
-
     var format = function (item) { if (item.id) return item.name + ' <div class="circle" style="background-color: #' + item.foodtype__color + '"></div><span color="grey">(' + item.foodtype__name + ')</span>'; };
 
     $('#id_meal').select2({
@@ -56,9 +50,9 @@ var select_data = {{ select_json|safe }};
         escapeMarkup: function(m) { return m; }
         });
 
-        {% endif %}
-
         $('#id_notes').expandingTextarea();
-{% endblock %}
+});
+
 </script>
 
+{% endblock %}
