@@ -170,9 +170,10 @@ def eaten_edit(request, userid, eatenid=None):
         form.helper.form_action = '/dinner/%s/eaten/new' % (request.user.id,)
         title = "Record an eaten meal"
 
-    data = models.Meal.objects.values('id', 'name', 'foodtype__id', 'foodtype__name', 'foodtype__color')
+    form.fields['meal'].queryset = models.Meal.objects.filter(owner=request.user.id).order_by('name', 'id')
+    data = form.fields['meal'].queryset.values('id', 'name', 'foodtype__id', 'foodtype__name', 'foodtype__color')
 
-    return render(request, 'eaten_add.html', {'form': form, 'title': title, 'meal_json': json.dumps(list(data)), 'eaten': instance})
+    return render(request, 'eaten_add.html', {'form': form, 'title': title, 'select_json': json.dumps(list(data)), 'instance': instance})
 
 @login_required(login_url=LOGIN_URL)
 def meal_edit(request, userid, pid=None):
@@ -220,7 +221,9 @@ def meal_edit(request, userid, pid=None):
         form.helper.form_action = '/dinner/%s/meal/new' % (request.user.id,)
         title = "Create a meal record"
 
-    data = models.FoodType.objects.values('id', 'name', 'color')
+    form.fields['foodtype'].queryset = models.FoodType.objects.filter(owner=request.user.id).order_by('name', 'id')
+    data = form.fields['foodtype'].queryset.values('id', 'name', 'color')
+
     return render(request, 'meal_edit.html', {
             'form': form, 'title': title,
             'select_json': json.dumps(list(data)),

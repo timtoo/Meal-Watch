@@ -20,7 +20,7 @@
 <script src="/static/dinner/expanding.js"></script>
 <script src="/static/dinner/bootstrap-datepicker.js"></script>
 <script>
-var select_data = {{ meal_json|safe }};
+var select_data = {{ select_json|safe }};
 
 $(document).ready(function() {
     $('.dateinput').datepicker({ format: "yyyy-mm-dd", autoclose: true });

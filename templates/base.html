@@ -58,7 +58,9 @@
     <div id="subheader">
 
 {% block bluebar %}
+          {% if random %}
           <div style="float: right; padding-right: 50px; margin-top: 0.5em" id="image-container"><div id="google-images"></div><div style="text-align: right; font-size: 7pt; color: #ccc;">Random images via <a style="color: inherit" href="http://images.google.com" target="_blank">Google</a></div></div>
+          {% endif %}
           <h2>Some random suggestions:</h2>
 
             <table id="random-suggestions" style="margin-left: 5em; margin-bottom: 1em">
@@ -67,6 +69,11 @@
             <td>{% if meal.foodtype__color %}<div title="{{meal.foodtype__name}}" class="circle" style="background-color: #{{meal.foodtype__color}}"></div> {% endif %}{{ meal.name|capfirst }}{% if meal.common %}*{% endif %}</td>
             </tr>
             {% endfor %}
+            {% if not random %}
+            <tr><td>You have not created any <a href="/dinner/{{user.id}}/meal/new">meal records</a> yet!</td>
+            </tr>
+
+            {% endif %}
             </table>
 {% endblock %}
       </div>
