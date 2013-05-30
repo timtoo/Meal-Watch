@@ -1,21 +1,32 @@
-- edit meal
-    - delete eaten (add edit button to eaten list, add delete option to edit page)
-
 - single meal display page
     - meal details
     - log of eaten
 
-
 - update average ratings on rating insert
 - better display to denote popular/unpopular?
-- constrain to "dinner"
+- constrain to "dinner" mealtype?
 - individual record display in popup?
 - big sortable/filterable grid of all meals
 - pictures/icons for meals?
 - colour code food types?
 
+- create new user account.
+    - add default data on creation (food types, etc)
+
+- finer grained permissions than just logged in
+
+- display colour in food creation/edit
+    - colour picker?
+- do some validation on colour field?
+
 - if meal has attached eaten instance do not allow delete.
     - later I'd like to display a summary of eaten meals before allowing
       delete
+
+- HTML being escaped in notifications (eg. edit beans & weiners)
+- make sure quote marks are escaped when inserting text into javascript
+  (is there safe javascript filter?)
+
+
 
 

@@ -190,7 +190,7 @@ def meal_edit(request, userid, pid=None):
     if request.method == 'POST':
         if request.POST.get('remove') == '1':
             messages.add_message(request, messages.WARNING, 'Deleted meal %s: %s' % (pid, instance.name))
-            url = '/dinner/%s/meals' % (request.user.id, instance.id)
+            url = '/dinner/%s/meals' % (request.user.id,)
             instance.delete()
             return HttpResponseRedirect(url)
         else:

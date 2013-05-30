@@ -24,6 +24,7 @@ class FoodType(models.Model):
 
     class Meta:
         ordering = ['name']
+        unique_together = ('owner', 'name',)
 
     def __unicode__(self):
         return self.name
@@ -43,6 +44,7 @@ class Meal(models.Model):
 
     class Meta:
         ordering = ['name']
+        unique_together = ('owner', 'name',)
 
     def __unicode__(self):
         return self.name

@@ -28,7 +28,7 @@
         <ul id="main_menu" class="nav nav-pills">
           {% if user.is_authenticated %}
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" tmp="/dinner/{{user.id}}">{{ user.username }}'s Meals <b class="caret"></b></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" href="#" tmp="/dinner/{{user.id}}">{{ user.username }}'s Meals <b class="caret"></b></a>
               <ul class="dropdown-menu" role="menu">
                   <li><a href="/dinner/{{ user.id }}/">Home</a></li>
                   <li><a href="/dinner/{{ user.id }}/eaten/new" xonclick="enter_eaten()">Eat Meal</a></li>
@@ -126,6 +126,7 @@
 <!-- script src="/static/dinner/jquery.ui.menubar.js"></script -->
 <script src="/static/dinner/bootstrap/js/bootstrap.js"></script>
 <script src="/static/dinner/bootstrap-notify.js"></script>
+<script src="/static/dinner/bootstrap-hover-dropdown.js"></script>
 
 <script>
 $(document).ready(function() {
