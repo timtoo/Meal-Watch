@@ -82,7 +82,7 @@ $('.atip').each( function() {
     $(this).qtip({
         content: {
             ajax: {
-                url: "/dinner/{{request.user.id}}/mealtip",
+                url: "/dinner/{{userid}}/mealtip",
                 data: { id: this.id }
             },
             text: "Loading..."

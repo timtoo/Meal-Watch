@@ -55,6 +55,7 @@ def overview(request, userid):
             ).order_by('last_eaten', '-rating', 'name')[:max_rows]
     context['random_names'] = [ "%s %s" % (x['name'], x['foodtype__name']) for x in context['random'] ]
     context['random_names'].insert(0, 'recipe')
+    context['userid'] = userid
     return render(request, 'dinner.html', context)
 
 def meal_tip(request, userid):
