@@ -139,3 +139,8 @@ ul#main_menu>li>a:hover,ul#main_menu>li>a:focus {
     cursor: pointer
 }
 
+table.overview td { vertical-align: top }
+table.overview td:first-child { width: 1%; white-space: nowrap; overflow: hidden }
+table.popular td:first-child { text-align: right }
+
+
