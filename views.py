@@ -33,26 +33,48 @@ def index(request):
     context['random_names'] = [ x['name'] for x in context['random'] ]
     return render(request, 'base.html', context)
 
-def overview(request, userid):
+
+def overview_table(request, report, userid, direct=False):
+    # am = aging, pm = popular, lm = latest
+
     max_rows = 10
     popular_days = 365
+
+    if report == 'am':
+        data = models.Meal.objects.filter(
+                common=True, owner=userid).values(
+                'id', 'name', 'last_eaten', 'rating', 'foodtype__color', 'foodtype__name',
+                ).order_by('last_eaten', '-rating', 'name')
+    elif report == 'pm':
+        data = models.Meal.objects.filter(owner=userid,
+                eaten__date__gte=date_delta(-popular_days)).values(
+                'id','name', 'common', 'last_eaten', 'foodtype__color', 'foodtype__name').annotate(
+                Count('eaten')).order_by(
+                '-eaten__count','-last_eaten', 'name')
+    elif report == 'lm':
+        data = models.Eaten.objects.filter(
+                meal__owner=userid).values(
+                'date', 'meal__name', 'meal__id', 'id', 'meal__common',
+                'meal__foodtype__color', 'meal__foodtype__name',
+                ).order_by('-date')
+    else:
+        data = []
+        report = ''
+
+    if direct is True:
+        return data[:max_rows]
+
+    return render(request, 'overview_table_%s.html' % report, {'data': data})
+
+
+def overview(request, userid):
     context = {}
     context['random'] = models.Meal.objects.filter(owner=userid).values(
             'name', 'rating', 'foodtype__color', 'foodtype__name', 'common',
             ).order_by('?')[:3]
-    context['latest'] = models.Eaten.objects.filter(
-            meal__owner=userid).values(
-            'date', 'meal__name', 'meal__id', 'id', 'meal__common', 'meal__foodtype__color', 'meal__foodtype__name',
-            ).order_by('-date')[:max_rows]
-    context['popular'] = models.Meal.objects.filter(owner=userid,
-            eaten__date__gte=date_delta(-popular_days)).values(
-            'id','name', 'common', 'last_eaten', 'foodtype__color', 'foodtype__name').annotate(
-            Count('eaten')).order_by(
-            '-eaten__count','-last_eaten', 'name')[:max_rows]
-    context['aging'] = models.Meal.objects.filter(
-            common=True, owner=userid).values(
-            'id', 'name', 'last_eaten', 'rating', 'foodtype__color', 'foodtype__name',
-            ).order_by('last_eaten', '-rating', 'name')[:max_rows]
+    context['latest'] = overview_table(request, 'lm', userid, direct=True)
+    context['popular'] = overview_table(request, 'pm', userid, direct=True)
+    context['aging'] = overview_table(request, 'am', userid, direct=True)
     context['random_names'] = [ "%s %s" % (x['name'], x['foodtype__name']) for x in context['random'] ]
     context['random_names'].insert(0, 'recipe')
     context['userid'] = userid
