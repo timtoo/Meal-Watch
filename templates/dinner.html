@@ -40,7 +40,7 @@
 {% block bottom %}
 <script>
 var table_update = function(report, arg) {
-    $.get('/dinner/{{user.id | default:0}}/overview_table', { 'report': report, 'arg': arg }, table_update_draw, 'json');
+    $.get('/' + location.pathname.split('/')[1] + '/' + location.pathname.split('/')[2] + '/overview_table', { 'report': report, 'arg': arg }, table_update_draw, 'json');
 }
 
 var table_update_draw = function (data) {
