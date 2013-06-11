@@ -219,7 +219,7 @@ def eaten_edit(request, userid, eatenid=None):
             if form.is_valid():
                 meal = form.save()
                 messages.add_message(request, messages.INFO, 'Updated eaten meal %s: %s' % (meal.id, meal.meal.name))
-                return HttpResponseRedirect('/dinner/%s/meal/%s' % (request.user.id, meal.meal.id,))
+                return HttpResponseRedirect('/dinner/%s/' % (request.user.id, ))
     else:
         form = EatenForm(instance=instance)
 
