@@ -47,54 +47,43 @@ var table_update_draw = function (data) {
     if (data.report == 'pm') {
         $('#popular-period').html(data.arg);
         $('#popular-table').replaceWith(data.html);
+        createTips('#popular-table .atip');
         trinfo("Popular meals list for " + data.arg + " updated");
     }
 }
 
+var createTips = function(tipclass) {
+    $(tipclass).each( function() {
+        $(this).qtip({
+            content: {
+                ajax: {
+                    url: "/dinner/{{userid}}/mealtip",
+                    data: { id: this.id }
+                },
+                text: "Loading..."
+            },
+            style: {
+                width: 320,
+                classes: "qtip-blue qtip-shadow"
+            },
+            position: {
+                target: "mouse",
+                adjust: {
+                    method: "flipinvert flipinvert",
+                    y: 12
+                },
+                viewport: $(window)
+            }
+        });
+    });
+};
+
 
 $(document).ready(
     function() {
-
-/*$(document).tooltip({
-    items:'.atip',
-    tooltipClass:'ttclass',
-    track: true,
-    content:function(callback) {
-        $.get('../mealtip', {
-            id:this.id
-        }, function(data) {
-            callback(data);
-        });
-    },
-});*/
-
-$('.atip').each( function() {
-    $(this).qtip({
-        content: {
-            ajax: {
-                url: "/dinner/{{userid}}/mealtip",
-                data: { id: this.id }
-            },
-            text: "Loading..."
-        },
-        style: {
-            width: 320,
-            classes: "qtip-blue qtip-shadow"
-        },
-        position: {
-            target: "mouse",
-            adjust: {
-                method: "flipinvert flipinvert",
-                y: 12
-            },
-            viewport: $(window)
-        }
-    });
-
-});
-
-
-});
+        createTips('.atip')
+    }
+);
 
 
 </script>

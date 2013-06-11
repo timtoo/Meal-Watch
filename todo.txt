@@ -1,7 +1,6 @@
-- ajax updated table loses tool tips
+- redirect someplace more sane after entering eaten meal
 - somewhere display data summary: oldest record, newest, number of
   records, etc.
-- redirect someplace more sane after entering eaten meal
 
 - single meal display page
     - meal details
