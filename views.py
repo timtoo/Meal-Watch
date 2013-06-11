@@ -95,7 +95,7 @@ def overview_table(request, userid, report=None, direct=False):
     logging.error(data.query)
 
     response_data = {
-        'html': render_to_string('overview_table_%s.html' % report, {'list_data': data}),
+        'html': render_to_string('overview_table_%s.html' % report, {'list_data': data[:max_rows]}),
         'report': report,
         'arg': request.GET.get('arg',''),
     }
