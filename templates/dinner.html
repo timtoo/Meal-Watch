@@ -26,8 +26,8 @@
         <div class="span4">
           <div class="rowhead"><h3>It's been a while</h3> <div class="dropdown h3sub">[<a id="aging-period" class="dropdown-toggle" data-toggle="dropdown" >common</a>]
          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <li><a tabindex="-1" href="#" onclick="trnotify('Not implemented yet!'); return false">Common Meals</a></li>
-            <li><a tabindex="-1" href="#" onclick="trnotify('Not implemented yet!'); return false">All Meals</a></li>
+            <li><a tabindex="-1" href="#" onclick="trwarning('Not implemented yet!'); return false">Common Meals</a></li>
+            <li><a tabindex="-1" href="#" onclick="trwarning('Not implemented yet!'); return false">All Meals</a></li>
          </ul>
           </div></div>
           {% with list_data=aging %}
@@ -47,6 +47,7 @@ var table_update_draw = function (data) {
     if (data.report == 'pm') {
         $('#popular-period').html(data.arg);
         $('#popular-table').replaceWith(data.html);
+        trinfo("Popular meals list for " + data.arg + " updated");
     }
 }
 
