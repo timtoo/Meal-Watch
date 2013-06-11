@@ -7,17 +7,13 @@
     - log of eaten
 
 - update average ratings on rating insert
-- better display to denote popular/unpopular?
-- constrain to "dinner" mealtype?
+- constrain to "dinner" mealtype? (ie support breakfast, lunch, etc)
 - individual record display in popup?
-- big sortable/filterable grid of all meals
-- pictures/icons for meals?
-- colour code food types?
 
 - create new user account.
     - add default data on creation (food types, etc)
 
-- finer grained permissions than just logged in
+- finer grained permissions than just logged in?
 
 - display colour in food creation/edit
     - colour picker?
@@ -29,7 +25,7 @@
 
 - HTML being escaped in notifications (eg. edit beans & weiners)
 - make sure quote marks are escaped when inserting text into javascript
-  (is there safe javascript filter?)
+  (is there safe javascript filter?) (where is this a problem?)
 
 
 

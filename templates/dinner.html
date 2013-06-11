@@ -26,12 +26,12 @@
         <div class="span4">
           <div class="rowhead"><h3>It's been a while</h3> <div class="dropdown h3sub">[<a id="aging-period" class="dropdown-toggle" data-toggle="dropdown" >common</a>]
          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <li><a tabindex="-1" href="#" onclick="trwarning('Not implemented yet!'); return false">Common Meals</a></li>
-            <li><a tabindex="-1" href="#" onclick="trwarning('Not implemented yet!'); return false">All Meals</a></li>
+            <li><a tabindex="-1" href="#" onclick="table_update('am', 'common'); return false">Common Meals</a></li>
+            <li><a tabindex="-1" href="#" onclick="table_update('am', 'all'); return false">All Meals</a></li>
          </ul>
           </div></div>
           {% with list_data=aging %}
-          {% include 'overview_table_pm.html' %}
+          {% include 'overview_table_am.html' %}
           {% endwith %}
         </div>
 
@@ -49,6 +49,12 @@ var table_update_draw = function (data) {
         $('#popular-table').replaceWith(data.html);
         createTips('#popular-table .atip');
         trinfo("Popular meals list for " + data.arg + " updated");
+    }
+    else if (data.report == 'am') {
+        $('#aging-period').html(data.arg);
+        $('#aging-table').replaceWith(data.html);
+        createTips('#aging-table .atip');
+        trinfo("Updated " + data.arg + " meals it's been a while for");
     }
 }
 

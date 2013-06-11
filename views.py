@@ -65,8 +65,10 @@ def overview_table(request, userid, report=None, direct=False):
     arg = request.GET.get('arg') or ''
 
     if report == 'am':
-        data = models.Meal.objects.filter(
-                common=True, owner=userid).values(
+        data = models.Meal.objects.filter(owner=userid)
+        if arg != 'all':
+            data = data.filter(common=True)
+        data = data.values(
                 'id', 'name', 'last_eaten', 'rating', 'foodtype__color', 'foodtype__name',
                 ).order_by('last_eaten', '-rating', 'name')
 
@@ -92,7 +94,7 @@ def overview_table(request, userid, report=None, direct=False):
     if direct is True:
         return data[:max_rows]
 
-    logging.error(data.query)
+    #logging.error(data.query)
 
     response_data = {
         'html': render_to_string('overview_table_%s.html' % report, {'list_data': data[:max_rows]}),
