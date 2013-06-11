@@ -1,4 +1,5 @@
 south
+python-dateutil
 django-crispy-forms
 
 # development

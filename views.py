@@ -4,6 +4,7 @@ from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.forms import ModelForm, Form, TextInput, Textarea, HiddenInput
 from django.contrib import messages
+from django.template.loader import render_to_string
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -12,45 +13,72 @@ from django.contrib.auth import authenticate, login
 from crispy_forms.helper import FormHelper
 from crispy_forms import layout, bootstrap
 
-from datetime import timedelta
+from dateutil.relativedelta import relativedelta
+
 import json
+import logging
 
 from dinner import models
 
 LOGIN_URL = '/dinner/login'
 
 
-def date_delta(days):
-    """Return timedate object the number of days from/to current"""
-    return timezone.now().date() + timedelta(days=days)
+def before_now(txt=None, days=0, months=0, years=0, timestamp=None):
+    """Return timedate object the number of days before current time
+
+    The txt argument expects something like "3 Months", "1 year", '2 Weeks", etc
+    """
+    if txt:
+        txt = txt.lower()
+        try:
+            val = int(txt.split()[0])
+        except ValueError:
+            val = 0
+        if 'year' in txt:
+            years = val
+        elif 'month' in txt:
+            months = val
+        elif 'week' in txt:
+            days = val * 7
+        elif 'day' in txt:
+            days = val
+
+    return (timestamp or timezone.now()) - relativedelta(days=days, months=months, years=years)
 
 def index(request):
     context = {}
     context['random'] = models.Meal.objects.filter(
-            created__gte = date_delta(-90)).values(
+            created__gte = before_now(days=90)).values(
             'name', 'rating', 'foodtype__color', 'foodtype__name', 'common',
             ).order_by('?')[:3]
     context['random_names'] = [ x['name'] for x in context['random'] ]
     return render(request, 'base.html', context)
 
 
-def overview_table(request, report, userid, direct=False):
+def overview_table(request, userid, report=None, direct=False):
     # am = aging, pm = popular, lm = latest
 
     max_rows = 10
-    popular_days = 365
+    popular_default = '1 year'
+
+    report = request.GET.get('report') or report
+    arg = request.GET.get('arg') or ''
 
     if report == 'am':
         data = models.Meal.objects.filter(
                 common=True, owner=userid).values(
                 'id', 'name', 'last_eaten', 'rating', 'foodtype__color', 'foodtype__name',
                 ).order_by('last_eaten', '-rating', 'name')
+
     elif report == 'pm':
-        data = models.Meal.objects.filter(owner=userid,
-                eaten__date__gte=date_delta(-popular_days)).values(
-                'id','name', 'common', 'last_eaten', 'foodtype__color', 'foodtype__name').annotate(
-                Count('eaten')).order_by(
-                '-eaten__count','-last_eaten', 'name')
+        data = models.Meal.objects.filter(owner=userid)
+        if arg != 'All Time':
+            data = data.filter(eaten__date__gte=before_now(arg or popular_default))
+        data = data.values(
+                'id','name', 'common', 'last_eaten', 'foodtype__color', 'foodtype__name'
+                ).annotate(Count('eaten')
+                ).order_by('-eaten__count','-last_eaten', 'name')
+
     elif report == 'lm':
         data = models.Eaten.objects.filter(
                 meal__owner=userid).values(
@@ -64,7 +92,16 @@ def overview_table(request, report, userid, direct=False):
     if direct is True:
         return data[:max_rows]
 
-    return render(request, 'overview_table_%s.html' % report, {'data': data})
+    logging.error(data.query)
+
+    response_data = {
+        'html': render_to_string('overview_table_%s.html' % report, {'list_data': data}),
+        'report': report,
+        'arg': request.GET.get('arg',''),
+    }
+
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
 
 
 def overview(request, userid):
@@ -72,9 +109,9 @@ def overview(request, userid):
     context['random'] = models.Meal.objects.filter(owner=userid).values(
             'name', 'rating', 'foodtype__color', 'foodtype__name', 'common',
             ).order_by('?')[:3]
-    context['latest'] = overview_table(request, 'lm', userid, direct=True)
-    context['popular'] = overview_table(request, 'pm', userid, direct=True)
-    context['aging'] = overview_table(request, 'am', userid, direct=True)
+    context['latest'] = overview_table(request, userid, 'lm', direct=True)
+    context['popular'] = overview_table(request, userid, 'pm', direct=True)
+    context['aging'] = overview_table(request, userid, 'am', direct=True)
     context['random_names'] = [ "%s %s" % (x['name'], x['foodtype__name']) for x in context['random'] ]
     context['random_names'].insert(0, 'recipe')
     context['userid'] = userid

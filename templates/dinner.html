@@ -11,10 +11,11 @@
         <div class="span4">
           <div class="rowhead"><h3>Most Popular Meals</h3> <div class="dropdown h3sub">[<a id="popular-period" class="dropdown-toggle" data-toggle="dropdown" >1 year</a>]
          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <li><a tabindex="-1" href="#" onclick="trnotify('Not implemented yet!'); return false">3 Months</a></li>
-            <li><a tabindex="-1" href="#" onclick="trnotify('Not implemented yet!'); return false">6 Months</a></li>
-            <li><a tabindex="-1" href="#" onclick="trnotify('Not implemented yet!'); return false">1 Year</a></li>
-            <li><a tabindex="-1" href="#" onclick="trnotify('Not implemented yet!'); return false">All Time</a></li>
+            <li><a tabindex="-1" href="#" onclick="table_update('pm', '1 Month'); return false">1 Month</a></li>
+            <li><a tabindex="-1" href="#" onclick="table_update('pm', '3 Months'); return false">3 Months</a></li>
+            <li><a tabindex="-1" href="#" onclick="table_update('pm', '6 Months'); return false">6 Months</a></li>
+            <li><a tabindex="-1" href="#" onclick="table_update('pm', '1 Year'); return false">1 Year</a></li>
+            <li><a tabindex="-1" href="#" onclick="table_update('pm', 'All Time'); return false">All Time</a></li>
          </ul>
           </div></div>
           {% with list_data=popular %}
@@ -38,6 +39,18 @@
 
 {% block bottom %}
 <script>
+var table_update = function(report, arg) {
+    $.get('/dinner/{{user.id | default:0}}/overview_table', { 'report': report, 'arg': arg }, table_update_draw, 'json');
+}
+
+var table_update_draw = function (data) {
+    if (data.report == 'pm') {
+        $('#popular-period').html(data.arg);
+        $('#popular-table').replaceWith(data.html);
+    }
+}
+
+
 $(document).ready(
     function() {
 
